@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-@ControllerAdvice(basePackages = "com.bootcamp.mvp_m6.infrastructure.adapters.input.web")
+@ControllerAdvice(basePackages = "com.bootcamp.mvp_m6.controller")
 public class GlobalControllerAdvice {
 
     /*Inyecta el nombre de la aplicación desde el properties*/
