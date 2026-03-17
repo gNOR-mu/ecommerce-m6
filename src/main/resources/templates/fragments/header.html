@@ -1,0 +1,35 @@
+<header th:fragment="headerFragment"
+        class="bg-black navbar navbar-expand-lg bd-navbar p-2 " data-bs-theme="dark">
+    <div class="container bd-gutter flex-wrap flex-lg-nowrap">
+        <a class="navbar-brand" th:href="@{/}" th:text="${appName}">App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <nav>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a id="nav-index" class="nav-link" aria-current="page" th:href="@{/}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-product" class="nav-link" th:href="@{/products}">Productos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a id="nav-contact" class="nav-link" th:href="@{/contact}">Contacto</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!--            &lt;!&ndash; carrito &ndash;&gt;-->
+            <!--            <a href="cart.html" class="ms-auto">-->
+            <!--                <button class="btn text-white" type=" submit" title="Carrito">-->
+            <!--                    <i class="bi bi-cart ">-->
+            <!--                        <span id="product-total" class="badge text-bg-secondary"></span>-->
+            <!--                    </i>-->
+            <!--                </button>-->
+            <!--            </a>-->
+        </div>
+    </div>
+</header>
