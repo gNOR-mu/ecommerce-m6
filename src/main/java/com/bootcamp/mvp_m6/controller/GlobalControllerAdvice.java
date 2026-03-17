@@ -1,4 +1,4 @@
-package com.bootcamp.mvp_m6.infrastructure.adapters.input.web;
+package com.bootcamp.mvp_m6.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
