@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.model;
 
+import com.bootcamp.mvp_m6.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +35,9 @@ public class Customer {
     @Email(message = "Correo inválido")
     @Column(unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @NotBlank(message = "La contraseña no puede estar en blanco")
     private String passHash;
