@@ -32,6 +32,7 @@ public class Customer {
 
     @NotNull
     @Email(message = "Correo inválido")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar en blanco")
