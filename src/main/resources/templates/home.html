@@ -2,7 +2,7 @@
 <html
         lang="es"
         xmlns:th="http://www.thymeleaf.org"
-        th:replace="~{layout/base :: masterLayout(~{::title}, ~{::.customCss}, ~{::section}, ~{})}">
+        th:replace="~{layout/base :: masterLayout(~{::title}, ~{::.customCss}, ~{::.content}, ~{})}">
 <head>
     <title>Inicio</title>
 
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="container-fluid p-o">
+<div class="content">
     <!-- sección principal -->
     <section class="img-container position-relative text-white text-center overflow-hidden">
         <img th:src="@{/assets/img/bg-principal-index.jpg}"
