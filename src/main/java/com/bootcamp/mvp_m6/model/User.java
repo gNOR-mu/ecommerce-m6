@@ -16,8 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "customers")
-public class Customer {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Customer {
     private String passHash;
 
     @OneToMany(
-            mappedBy = "customer",
+            mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
