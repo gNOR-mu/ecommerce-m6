@@ -1,14 +1,13 @@
-<header th:fragment="headerFragment"
-        class="bg-black navbar navbar-expand-lg bd-navbar p-2 " data-bs-theme="dark">
-    <div class="container bd-gutter flex-wrap flex-lg-nowrap">
-        <a class="navbar-brand" th:href="@{/}" th:text="${appName}">App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <nav>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<header th:fragment="headerFragment">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}" th:text="${appName}">App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a id="nav-index" class="nav-link" aria-current="page" th:href="@{/}">Inicio</a>
                     </li>
@@ -20,16 +19,35 @@
                         <a id="nav-contact" class="nav-link" th:href="@{/contact}">Contacto</a>
                     </li>
                 </ul>
-            </nav>
+                <ul class="navbar-nav ms-auto">
 
-            <!--            &lt;!&ndash; carrito &ndash;&gt;-->
-            <!--            <a href="cart.html" class="ms-auto">-->
-            <!--                <button class="btn text-white" type=" submit" title="Carrito">-->
-            <!--                    <i class="bi bi-cart ">-->
-            <!--                        <span id="product-total" class="badge text-bg-secondary"></span>-->
-            <!--                    </i>-->
-            <!--                </button>-->
-            <!--            </a>-->
+
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Ingresar</a>
+                    </li>
+
+                    <!-- carrito -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a th:href="@{/cart}" class="btn text-white">
+                            <i class="bi bi-cart ">
+                                <span id="product-total-items" class="badge text-bg-secondary"></span>
+                            </i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
+                        <span class="navbar-text me-3" sec:authentication="name"></span>
+
+                        <form th:action="@{/logout}" method="post" class="m-0">
+                            <button type="submit" class="nav-link btn btn-link">
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+
+    </nav>
+
 </header>
