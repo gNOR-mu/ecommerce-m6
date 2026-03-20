@@ -71,4 +71,4 @@ Credenciales válidas para iniciar sesión (creadas al iniciar la aplicación):
 | ROL   | EMAIL          | CONTRASEÑA |
 |-------|----------------|------------|
 | ADMIN | admin@email.cl | admin1234  |
-| USER  | admin@email.cl | user1234   |
+| USER  | user@email.cl  | user1234   |
