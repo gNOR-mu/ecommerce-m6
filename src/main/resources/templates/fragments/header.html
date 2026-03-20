@@ -36,8 +36,6 @@
                     </li>
 
                     <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
-                        <span class="navbar-text me-3" sec:authentication="name"></span>
-
                         <form th:action="@{/logout}" method="post" class="m-0">
                             <button type="submit" class="nav-link btn btn-link">
                                 Cerrar sesión
