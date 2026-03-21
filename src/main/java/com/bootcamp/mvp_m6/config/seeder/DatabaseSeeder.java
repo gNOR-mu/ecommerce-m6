@@ -1,0 +1,187 @@
+package com.bootcamp.mvp_m6.config.seeder;
+
+import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
+import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
+import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
+import com.bootcamp.mvp_m6.enums.Role;
+import com.bootcamp.mvp_m6.model.Brand;
+import com.bootcamp.mvp_m6.model.Category;
+import com.bootcamp.mvp_m6.model.Product;
+import com.bootcamp.mvp_m6.service.BrandService;
+import com.bootcamp.mvp_m6.service.CategoryService;
+import com.bootcamp.mvp_m6.service.ProductService;
+import com.bootcamp.mvp_m6.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+@Component
+@RequiredArgsConstructor
+public class DatabaseSeeder implements CommandLineRunner {
+
+    private final UserService userService;
+    private final BrandService brandService;
+    private final CategoryService categoryService;
+    private final ProductService productService;
+
+    @Override
+    public void run(String... args) throws Exception {
+        seedUsers();
+        seedCatalog();
+    }
+
+    private void seedUsers() {
+        /*Usuario administrado*/
+        UserPrivateRegisterDTO admin = UserPrivateRegisterDTO.builder()
+                .email("admin@email.cl")
+                .password("admin1234")
+                .rut("12345678-9")
+                .cellphone("+56900001111")
+                .name("admin")
+                .role(Role.ADMIN)
+                .build();
+
+        /*Usuario normal*/
+        UserPublicRegisterDTO user = UserPublicRegisterDTO.builder()
+                .email("user@email.cl")
+                .password("user1234")
+                .rut("12345679-k")
+                .cellphone("+56911112222")
+                .name("usuario")
+                .build();
+
+
+        userService.createPrivateUser(admin);
+        userService.createPublicUser(user);
+    }
+
+
+    private void seedCatalog() {
+        Brand maui = brandService.create(Brand.builder().name("Maui").build());
+        Brand head = brandService.create(Brand.builder().name("Head").build());
+        Brand rayBand = brandService.create(Brand.builder().name("Ray-Ban").build());
+        Brand totem = brandService.create(Brand.builder().name("Totem").build());
+
+        Category ropa = categoryService.create(Category.builder().name("Ropa").build());
+        Category expedicion = categoryService.create(Category.builder().name("Expedición").build());
+        Category accesorios = categoryService.create(Category.builder().name("Accesorios").build());
+        Category deporte = categoryService.create(Category.builder().name("Deporte").build());
+
+        //evaluar moverlo a un archivo aparte
+        Product mochila = productService.create(ProductFormDTO.builder()
+                .categoryId(expedicion.getId())
+                .brandId(head.getId())
+                .price(new BigDecimal("85000.0"))
+                .shortDescription("Mochila de expedición de 60L. Ideal para viajes.")
+                .name("Mochila Head Trekking 60L")
+                .urlImage("https://c.pxhere.com/photos/e1/74/backpack_hiking_backpack_hiking_mountains_forest_vietnam_nature_water_bottle-1395064.jpg!d")
+                .stock(15)
+                .description("""
+                        Esta mochila de expedición está diseñada para los aventureros más exigentes. Confeccionada en Nylon de alta resistencia, garantiza durabilidad y protección
+                            contra los elementos. Su capacidad de 60 litros te permite llevar todo lo necesario para tus travesías, mientras que su diseño ergonómico asegura una distribución
+                            equilibrada del peso y un confort óptimo durante largas caminatas. El color azul vibrante no solo le da un toque de estilo, sino que también mejora la visibilidad en
+                            entornos naturales. Además, cuenta con múltiples compartimentos y correas ajustables para organizar tu equipo de manera eficiente. Ya sea para un trekking de varios días
+                            o una escalada desafiante, esta mochila es tu compañera ideal.
+                        """)
+                .features(Map.of(
+                        "capacidad", "60 Litros",
+                        "Impermeable", "Sí",
+                        "Bolsillos", 5
+                ))
+                .build()
+        );
+
+
+        Product bici = productService.create(ProductFormDTO.builder()
+                .categoryId(deporte.getId())
+                .brandId(totem.getId())
+                .price(new BigDecimal("220000"))
+                .shortDescription("Bicicleta de montaña rodado 29, 27 velocidades")
+                .name("Bicicleta Totem W860 Aro 29")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Orbea_Occam_2020.jpg/1024px-Orbea_Occam_2020.jpg")
+                .stock(80)
+                .description("""
+                        Esta Mountain Bike está diseñada para los amantes de la aventura y la velocidad. Con un cuadro de Aluminio ligero y resistente, esta bicicleta te ofrece la agilidad y
+                            durabilidad que necesitas para conquistar cualquier sendero. Equipada con 27 velocidades, te permite adaptar tu pedaleo a cualquier tipo de terreno, desde subidas empinadas
+                            hasta descensos rápidos. Los frenos de Disco Hidráulico garantizan una frenada potente y segura en todas las condiciones climáticas, mientras que su suspensión delantera
+                            y trasera absorbe los impactos, proporcionando un viaje suave y controlado. Con un rodado de 29 pulgadas, esta bicicleta te ofrece una mayor estabilidad y tracción,
+                            ideal para explorar nuevos caminos y superar tus límites.
+                        """)
+                .features(Map.of(
+                        "Aro", 29,
+                        "Frenos", "Hidráulico",
+                        "Velocidades", 27,
+                        "Cuadro", "Aluminio"
+                ))
+                .build()
+        );
+
+        Product carpa = productService.create(ProductFormDTO.builder()
+                .categoryId(expedicion.getId())
+                .brandId(maui.getId())
+                .price(new BigDecimal("145000"))
+                .shortDescription("Tienda de campaña resistente a lluvias")
+                .name("Carpa Maui 4 Personas")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Husky_Tent_near_scout_camp_near_Kouty%2C_T%C5%99eb%C3%AD%C4%8D_District.jpg/1024px-Husky_Tent_near_scout_camp_near_Kouty%2C_T%C5%99eb%C3%AD%C4%8D_District.jpg")
+                .stock(45)
+                .description("""
+                        Carpa tipo iglú resistente a vientos moderados y lluvias. Fácil de armar e ideal para acampar en
+                         familia o con amigos en la naturaleza.
+                        """)
+                .features(Map.of(
+                        "Capacidad", 4,
+                        "Estaciones", 3,
+                        "Columnas agua", "3000mm",
+                        "Peso", "4.5kg"
+                ))
+                .build()
+        );
+
+        Product chaqueta = productService.create(ProductFormDTO.builder()
+                .categoryId(ropa.getId())
+                .brandId(head.getId())
+                .price(new BigDecimal("85000"))
+                .shortDescription("Chaqueta resistente al agua")
+                .name("Chaqueta The North Face Cortavientos")
+                .urlImage("https://assets.thenorthface.eu/images/t_img/f_auto,h_462,e_sharpen:60,w_462/dpr_2.0/v1753206753/NF0A7QAW4GU-ALT20/Mens-Alta-Vista-Rain-Jacket.jpg")
+                .stock(15)
+                .description("""
+                        Chaqueta ligera y resistente al agua, perfecta para actividades al aire libre o para protegerse
+                         del clima cambiante.
+                        """)
+                .features(Map.of(
+                        "Talla", "L",
+                        "Color", "Gris",
+                        "Impermeable", "Sí",
+                        "Bolsillos con cierre", 2
+                ))
+                .build()
+        );
+
+        Product gafas = productService.create(ProductFormDTO.builder()
+                .categoryId(accesorios.getId())
+                .brandId(rayBand.getId())
+                .price(new BigDecimal("115000"))
+                .shortDescription("Gafas de sol con protección UV400")
+                .name("Gafas Ray-Ban Aviator")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Beach-sand-summer-46710.jpg/1024px-Beach-sand-summer-46710.jpg")
+                .stock(24)
+                .description("""
+                        El diseño clásico que nunca pasa de moda. Protección total contra los rayos UV con un estilo 
+                        inconfundible.
+                        """)
+                .features(Map.of(
+                        "Polarizado", "Sí",
+                        "Filtro", "UV400",
+                        "Color cristal", "Verde",
+                        "Material marco", "Metal"
+                ))
+                .build()
+        );
+
+
+    }
+}
