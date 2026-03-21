@@ -3,10 +3,14 @@ package com.bootcamp.mvp_m6.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -24,7 +28,7 @@ public class Product {
 
     @NotNull(message = "El precio no puede ser nulo")
     @DecimalMin(value = "1.0", message = "El precio no puede ser inferior a 1.0")
-    private BigDecimal unitPrice;
+    private BigDecimal price;
 
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
@@ -44,6 +48,9 @@ public class Product {
     @NotNull(message = "El stock no puede ser nulo")
     @Min(value = 0, message = "El stock no puede ser inferior a 0")
     private Integer stock;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Object> features = new HashMap<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
