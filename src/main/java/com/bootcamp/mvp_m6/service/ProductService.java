@@ -36,23 +36,25 @@ public class ProductService {
         //TODO
         return List.of();
     }
-    /*
 
-     *//**
+     /**
      * Obtiene un resumen de todos los productos
      * @return Una lista con el resumen de todos los productos
-     *//*
+     */
     public List<ProductResumeDTO> findAllResume() {
-        return productDAO.findAllResume();
+        return productRepository.findAllResume();
     }
-
+/*
     *//**
      * Busca todos los productos como administrador
      * @return Una lista de todos los productos
      *//*
     public List<AdminProductListDTO> findAll() {
-        return productDAO.findAll();
+        return productRepository.findAll();
     }
+
+    */
+    /*
 
     *//**
      * Busca la información de un producto por ID
