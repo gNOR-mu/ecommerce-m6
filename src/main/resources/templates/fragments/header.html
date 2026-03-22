@@ -35,6 +35,12 @@
                         </a>
                     </li>
 
+                    <!--panel de administración-->
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/admin}">Administración</a>
+                    </li>
+
+                    <!-- Cierre de sesión-->
                     <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
                         <form th:action="@{/logout}" method="post" class="m-0">
                             <button type="submit" class="nav-link btn btn-link">
@@ -42,6 +48,8 @@
                             </button>
                         </form>
                     </li>
+
+
                 </ul>
             </div>
         </div>
