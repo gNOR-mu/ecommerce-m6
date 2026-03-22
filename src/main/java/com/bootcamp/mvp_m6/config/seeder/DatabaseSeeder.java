@@ -77,7 +77,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .price(new BigDecimal("85000.0"))
                 .shortDescription("Mochila de expedición de 60L. Ideal para viajes.")
                 .name("Mochila Head Trekking 60L")
-                .urlImage("https://upload.wikimedia.org/wikipedia/commons/a/a1/Plecak_Hiker_50_L_HiMountain.jpg")
+                .urlImage("https://c.pxhere.com/photos/e1/74/backpack_hiking_backpack_hiking_mountains_forest_vietnam_nature_water_bottle-1395064.jpg!d")
                 .stock(15)
                 .description("""
                         Esta mochila de expedición está diseñada para los aventureros más exigentes. Confeccionada en Nylon de alta resistencia, garantiza durabilidad y protección
