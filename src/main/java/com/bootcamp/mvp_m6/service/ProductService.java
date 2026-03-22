@@ -31,11 +31,7 @@ public class ProductService {
      * @return Una lista con los productos más vendidos
      */
     public List<ProductResumeDTO> getTopProducts() {
-/*
         return productRepository.getTopProducts();
-*/
-        //TODO
-        return List.of();
     }
 
     /**

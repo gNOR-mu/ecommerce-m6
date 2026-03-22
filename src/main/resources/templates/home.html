@@ -25,25 +25,21 @@
         </div>
     </section>
 
-    <!--TODO adaptar JSP a thymeleaf-->
-    <!-- productos destacados -->
-    <!--<section class="container mt-5 text-center ">
+    <section class="container mt-5 text-center" th:if="${!#lists.isEmpty(topProducts)}">
         <h2 class=" m-5">Productos destacados</h2>
-        <div  class="row gap-3 justify-content-center">
-            <c:forEach items="${products}" var="product">
-                <article class="col-lg card p-0 product-card">
-                    <a href="${pageContext.request.contextPath}/products?id=${product.id}" class="product-card-link">
-                        <img src="${product.urlImage}" class="card-img-top product-card-img" alt="${product.name}">
-                        <div class="card-body">
-                            <h5 class="card-title">${product.name}</h5>
-                            <p class="card-text">${product.shortDescription}</p>
-                            <span><strong><fmt:formatNumber value="${product.price}" type="currency"/></strong></span>
-                        </div>
-                    </a>
-                </article>
-            </c:forEach>
+        <div class="row gap-3 justify-content-center" th:each="product : ${topProducts}">
+            <article class="col-lg card p-0 product-card">
+                <a th:href="@{/products/{id}(id = ${product.id})}" class="product-card-link">
+                    <img th:src="${product.urlImage}" class="card-img-top product-card-img" th:alt="${product.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">${product.shortDescription}</p>
+                        <span><strong th:text="${#numbers.formatCurrency(product.price)}">$0.00</strong></span>
+                    </div>
+                </a>
+            </article>
         </div>
-    </section>-->
+    </section>
 
     <!-- info sobre qué es la empresa -->
     <section class="bg-dark mt-5 p-5">
