@@ -77,7 +77,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .price(new BigDecimal("85000.0"))
                 .shortDescription("Mochila de expedición de 60L. Ideal para viajes.")
                 .name("Mochila Head Trekking 60L")
-                .urlImage("https://c.pxhere.com/photos/e1/74/backpack_hiking_backpack_hiking_mountains_forest_vietnam_nature_water_bottle-1395064.jpg!d")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/a/a1/Plecak_Hiker_50_L_HiMountain.jpg")
                 .stock(15)
                 .description("""
                         Esta mochila de expedición está diseñada para los aventureros más exigentes. Confeccionada en Nylon de alta resistencia, garantiza durabilidad y protección
@@ -101,7 +101,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .price(new BigDecimal("220000"))
                 .shortDescription("Bicicleta de montaña rodado 29, 27 velocidades")
                 .name("Bicicleta Totem W860 Aro 29")
-                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Orbea_Occam_2020.jpg/1024px-Orbea_Occam_2020.jpg")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/9/96/Orbea_Occam_2020.jpg")
                 .stock(80)
                 .description("""
                         Esta Mountain Bike está diseñada para los amantes de la aventura y la velocidad. Con un cuadro de Aluminio ligero y resistente, esta bicicleta te ofrece la agilidad y
@@ -125,7 +125,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .price(new BigDecimal("145000"))
                 .shortDescription("Tienda de campaña resistente a lluvias")
                 .name("Carpa Maui 4 Personas")
-                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Husky_Tent_near_scout_camp_near_Kouty%2C_T%C5%99eb%C3%AD%C4%8D_District.jpg/1024px-Husky_Tent_near_scout_camp_near_Kouty%2C_T%C5%99eb%C3%AD%C4%8D_District.jpg")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/b/bb/Husky_Tent_near_scout_camp_near_Kouty%2C_T%C5%99eb%C3%AD%C4%8D_District.jpg")
                 .stock(45)
                 .description("""
                         Carpa tipo iglú resistente a vientos moderados y lluvias. Fácil de armar e ideal para acampar en
@@ -145,8 +145,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .brandId(head.getId())
                 .price(new BigDecimal("85000"))
                 .shortDescription("Chaqueta resistente al agua")
-                .name("Chaqueta The North Face Cortavientos")
-                .urlImage("https://assets.thenorthface.eu/images/t_img/f_auto,h_462,e_sharpen:60,w_462/dpr_2.0/v1753206753/NF0A7QAW4GU-ALT20/Mens-Alta-Vista-Rain-Jacket.jpg")
+                .name("Chaqueta Cortavientos")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/4/46/Windbreaker_Jacket%2C_Hood_Outside.jpg")
                 .stock(15)
                 .description("""
                         Chaqueta ligera y resistente al agua, perfecta para actividades al aire libre o para protegerse
@@ -167,7 +167,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .price(new BigDecimal("115000"))
                 .shortDescription("Gafas de sol con protección UV400")
                 .name("Gafas Ray-Ban Aviator")
-                .urlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Beach-sand-summer-46710.jpg/1024px-Beach-sand-summer-46710.jpg")
+                .urlImage("https://upload.wikimedia.org/wikipedia/commons/5/58/Beach-sand-summer-46710.jpg")
                 .stock(24)
                 .description("""
                         El diseño clásico que nunca pasa de moda. Protección total contra los rayos UV con un estilo 
