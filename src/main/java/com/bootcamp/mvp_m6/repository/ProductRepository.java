@@ -33,4 +33,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             """)
     ProductInfoDTO findInfoById(@Param("id") Long id);
 
+
+    /**
+     * Obtiene un listado del top 3 productos más vendidos
+     * @return Listado con los 3 productos más vendidos
+     */
+    @Query("""
+            SELECT new com.bootcamp.mvp_m6.dto.product.ProductResumeDTO(p.id, p.name, p.shortDescription, p.urlImage, p.price)
+            FROM OrderItem oi
+            JOIN oi.product p
+            GROUP BY p.id, p.name, p.shortDescription, p.urlImage, p.price
+            ORDER BY SUM(oi.quantity) DESC
+            LIMIT 3
+            """)
+    List<ProductResumeDTO> getTopProducts();
 }
