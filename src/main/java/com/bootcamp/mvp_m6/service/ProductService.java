@@ -1,6 +1,7 @@
 package com.bootcamp.mvp_m6.service;
 
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
+import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductResumeDTO;
 import com.bootcamp.mvp_m6.mapper.ProductMapper;
 import com.bootcamp.mvp_m6.model.Product;
@@ -37,15 +38,26 @@ public class ProductService {
         return List.of();
     }
 
-     /**
+    /**
      * Obtiene un resumen de todos los productos
+     *
      * @return Una lista con el resumen de todos los productos
      */
     public List<ProductResumeDTO> findAllResume() {
         return productRepository.findAllResume();
     }
-/*
-    *//**
+
+    /**
+     * Busca la información de un producto por ID
+     *
+     * @param id ID del producto
+     * @return Información del producto
+     */
+    public ProductInfoDTO findInfoById(Long id) {
+        return productRepository.findInfoById(id);
+    }
+    /*
+     *//**
      * Busca todos los productos como administrador
      * @return Una lista de todos los productos
      *//*
@@ -56,16 +68,9 @@ public class ProductService {
     */
     /*
 
-    *//**
-     * Busca la información de un producto por ID
-     * @param id ID del producto
-     * @return Información del producto
-     *//*
-    public ProductInfoDTO findInfoById(Long id) {
-        return productDAO.findInfoById(id);
-    }
 
-    *//**
+
+     *//**
      * Busca un producto por ID
      * @param id ID del producto
      * @return Producto con la id coincidente
