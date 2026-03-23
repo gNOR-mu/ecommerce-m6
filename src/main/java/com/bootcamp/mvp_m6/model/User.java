@@ -26,9 +26,6 @@ public class User {
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
 
-    @NotBlank(message = "El rut no puede estar en blanco")
-    private String rut;
-
     private String cellphone;
 
     @NotNull
