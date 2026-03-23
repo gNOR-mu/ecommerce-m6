@@ -2,20 +2,17 @@ package com.bootcamp.mvp_m6.dto.user;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserPublicRegisterDTO {
 
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
-
-    @NotBlank(message = "El rut no puede estar en blanco")
-    private String rut;
 
     private String cellphone;
 
