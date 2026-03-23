@@ -11,7 +11,6 @@ public class UserMapper {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .cellphone(dto.getCellphone())
-                .rut(dto.getRut())
                 .passHash(dto.getPassword())
                 .build();
     }
@@ -21,7 +20,6 @@ public class UserMapper {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .cellphone(dto.getCellphone())
-                .rut(dto.getRut())
                 .role(dto.getRole())
                 .passHash(dto.getPassword())
                 .build();
