@@ -5,6 +5,7 @@ import com.bootcamp.mvp_m6.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProductMapper {
@@ -14,4 +15,15 @@ public interface ProductMapper {
     @Mapping(source = "brandId", target = "category.id")
     @Mapping(target = "orderItems", ignore = true)
     Product toEntity(ProductFormDTO dto);
+
+    @Mapping(target = "brandId", source = "brand.id")
+    @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "featureKeys", ignore = true)
+    @Mapping(target = "featureValues", ignore = true)
+    ProductFormDTO toDTO(Product product);
+
+    @Mapping(target = "orderItems", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "brand", ignore = true)
+    void updateEntityFromDTO(ProductFormDTO dto, @MappingTarget Product entity);
 }
