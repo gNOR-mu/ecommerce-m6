@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.service;
 
+import com.bootcamp.mvp_m6.dto.product.AdminProductListDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductResumeDTO;
@@ -21,6 +22,7 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public Product create(ProductFormDTO dto) {
+        dto.buildFeaturesMap();
         Product product = productMapper.toEntity(dto);
         return productRepository.save(product);
     }
@@ -52,38 +54,67 @@ public class ProductService {
     public ProductInfoDTO findInfoById(Long id) {
         return productRepository.findInfoById(id);
     }
-    /*
-     *//**
+
+    /**
      * Busca todos los productos como administrador
+     *
      * @return Una lista de todos los productos
-     *//*
+     */
     public List<AdminProductListDTO> findAll() {
-        return productRepository.findAll();
+        return productRepository.findAllAdmin();
     }
 
-    */
-    /*
+    /**
+     * Elimina un producto
+     *
+     * @param id ID del producto
+     */
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
+    }
 
 
-
-     *//**
+    /**
      * Busca un producto por ID
+     *
      * @param id ID del producto
      * @return Producto con la id coincidente
-     *//*
-    public Product findById(Long id){
-        return productDAO.findById(id);
+     */
+    public ProductFormDTO findById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+        return productMapper.toDTO(product);
     }
 
-    *//**
-     * Elimina un producto
-     * @param id ID del producto
-     *//*
-    public void deleteById(Long id) {
-        productDAO.deleteById(id);
+    /**
+     * Edita un producto
+     *
+     * @param dto Producto a editar
+     */
+    public void update(Long id, ProductFormDTO dto) {
+        Product existing = productRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+        dto.buildFeaturesMap();
+
+        productMapper.updateEntityFromDTO(dto, existing);
+
+        existing.setCategory(categoryService.getReferenceById(dto.getCategoryId()));
+        existing.setBrand(brandService.getReferenceById(dto.getBrandId()));
+
+        productRepository.save(existing);
     }
 
-    *//**
+    /*
+
+
+
+
+
+
+
+     *//**
      * Busca productos
      * @param searchText Texto a buscar
      * @return Listado con los productos coincidentes
@@ -93,14 +124,7 @@ public class ProductService {
     }
 
 
-    *//**
-     * Edita un producto
-     * @param product Producto a editar
-     *//*
-    public void edit(ProductFormDTO product) {
-        validateFields(product);
-        productDAO.save(product);
-    }
+
 
     *//**
      * Valida los campos de un producto

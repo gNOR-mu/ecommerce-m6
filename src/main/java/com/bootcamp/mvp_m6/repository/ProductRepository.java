@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.repository;
 
+import com.bootcamp.mvp_m6.dto.product.AdminProductListDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductResumeDTO;
 import com.bootcamp.mvp_m6.model.Product;
@@ -20,6 +21,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<ProductResumeDTO> findAllResume();
 
     @Query("""
+            SELECT new com.bootcamp.mvp_m6.dto.product.AdminProductListDTO(
+                p.id,
+                p.price,
+                p.name,
+                c.name,
+                b.name,
+                p.stock)
+            FROM Product p
+            JOIN p.brand b
+            JOIN p.category c
+            """)
+    List<AdminProductListDTO> findAllAdmin();
+
+    @Query("""
             SELECT new com.bootcamp.mvp_m6.dto.product.ProductInfoDTO(
                 id,
                 price,
@@ -36,6 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     /**
      * Obtiene un listado del top 3 productos más vendidos
+     *
      * @return Listado con los 3 productos más vendidos
      */
     @Query("""

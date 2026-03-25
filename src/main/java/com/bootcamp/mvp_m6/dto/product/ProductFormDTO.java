@@ -5,7 +5,9 @@ import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,4 +53,23 @@ public class ProductFormDTO {
     @Min(value = 0, message = "El stock no puede ser inferior a 0")
     private int stock;
 
+
+    // Claves y valores de las características, adaptado del controlador del mvp5 aquí
+    private List<String> featureKeys = new ArrayList<>();
+    private List<String> featureValues = new ArrayList<>();
+
+    public void buildFeaturesMap() {
+        this.features = new HashMap<>();
+
+        if (featureKeys != null && featureValues != null) {
+            for (int i = 0; i < featureKeys.size(); i++) {
+                String key = featureKeys.get(i).trim();
+                String value = featureValues.get(i).trim();
+
+                if (!key.isEmpty() && !value.isEmpty()) {
+                    features.put(key, value);
+                }
+            }
+        }
+    }
 }
