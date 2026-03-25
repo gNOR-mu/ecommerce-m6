@@ -45,8 +45,7 @@
             </a>
         </h3>
 
-        <form method="get" th:action="@{/admin/products}" class="mb-3">
-            <input type="hidden" name="action" value="search"/>
+        <form method="get" th:action="@{/admin/products/search}" class="mb-3">
             <div class="input-group">
                 <input type="text" name="searchText" class="form-control" placeholder="Buscar por producto/categoría"
                        th:value="${param.searchText}">

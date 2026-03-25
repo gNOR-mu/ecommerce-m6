@@ -63,4 +63,27 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             LIMIT 3
             """)
     List<ProductResumeDTO> getTopProducts();
+
+    /**
+     * Busca productos que contengan la palabra clave por nombre de producto, nombre de categoría o nombre de marca
+     * @param searchText Texto a buscar
+     * @return Lista de los productos que contienen el texto especificado
+     * @apiNote Ignora mayúsculas/minúsculas
+     */
+    @Query("""
+            SELECT new com.bootcamp.mvp_m6.dto.product.AdminProductListDTO(
+                p.id,
+                p.price,
+                p.name,
+                c.name,
+                b.name,
+                p.stock)
+            FROM Product p
+            JOIN p.brand b
+            JOIN p.category c
+            WHERE p.name ILIKE %:searchText%
+            OR c.name ILIKE %:searchText%
+            or b.name ILIKE %:searchText%
+            """)
+    List<AdminProductListDTO> search(@Param("searchText") String searchText);
 }
