@@ -6,6 +6,8 @@ import com.bootcamp.mvp_m6.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BrandService {
@@ -19,5 +21,9 @@ public class BrandService {
         }
 
         return brandRepository.save(brand);
+    }
+
+    public List<Brand> findAll(){
+        return brandRepository.findAll();
     }
 }

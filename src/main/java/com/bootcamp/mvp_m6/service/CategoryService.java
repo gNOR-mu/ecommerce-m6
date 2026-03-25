@@ -6,6 +6,8 @@ import com.bootcamp.mvp_m6.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -13,10 +15,14 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
 
-    public Category create(Category category){
-        if(categoryRepository.existsByName(category.getName())){
+    public Category create(Category category) {
+        if (categoryRepository.existsByName(category.getName())) {
             throw new InvalidOperationException("Ya existe una categoría con el nombre: " + category.getName());
         }
         return categoryRepository.save(category);
+    }
+
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
     }
 }
