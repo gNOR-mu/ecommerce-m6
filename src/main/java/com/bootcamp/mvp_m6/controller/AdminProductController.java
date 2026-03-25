@@ -86,4 +86,13 @@ public class AdminProductController {
         redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
         return "redirect:/admin/products";
     }
+
+    @GetMapping("/search")
+    public String search(
+            Model model,
+            @RequestParam @NotNull String searchText){
+
+        model.addAttribute("products", productService.search(searchText));
+        return "admin/product";
+    }
 }

@@ -106,27 +106,20 @@ public class ProductService {
         productRepository.save(existing);
     }
 
+    /**
+     * Busca productos
+     *
+     * @param searchText Texto a buscar
+     * @return Listado con los productos coincidentes
+     */
+    public List<AdminProductListDTO> search(String searchText) {
+        return productRepository.search(searchText);
+    }
+
     /*
 
 
-
-
-
-
-
      *//**
-     * Busca productos
-     * @param searchText Texto a buscar
-     * @return Listado con los productos coincidentes
-     *//*
-    public List<AdminProductListDTO> search(String searchText) {
-        return productDAO.search(searchText);
-    }
-
-
-
-
-    *//**
      * Valida los campos de un producto
      * @param product Producto a validar
      *//*
