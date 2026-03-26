@@ -47,7 +47,8 @@
 
         <form method="get" th:action="@{/admin/products/search}" class="mb-3">
             <div class="input-group">
-                <input type="text" name="searchText" class="form-control" placeholder="Buscar por producto/categoría"
+                <input type="text" name="searchText" class="form-control"
+                       placeholder="Buscar por producto, categoría o marca"
                        th:value="${param.searchText}">
                 <button type="submit" class="btn btn-dark">Buscar</button>
             </div>
