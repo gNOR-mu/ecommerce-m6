@@ -47,8 +47,14 @@ public class CartService {
     }
 
 
+    /**
+     * Añade un producto al carro actual del usuario
+     * @param user Usuario sobre el cual añadir el producto
+     * @param productId Id del producto a añadir
+     * @param quantity Cantidad a añadir
+     */
     @Transactional
-    public void addToCart(User user, Long productId, int quantity) {
+    public void addProductToCart(User user, Long productId, int quantity) {
 
         //primero obtengo el carro del usuario y el producto
         Cart cart = getCart(user);
@@ -59,7 +65,7 @@ public class CartService {
         // si lo tengo solo le añado la cantidad
 
         CartItem cartItem = cart.getItems().stream()
-                .filter(item -> item.getId().equals(productId))
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElse(null);
 
