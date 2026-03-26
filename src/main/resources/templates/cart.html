@@ -42,12 +42,10 @@
                 </div>
             </li>
         </ul>
-
-        <h3>Descuentos totales:<span th:text="${cart.totalDiscounts} + '%'"></span></h3>
+        <h3>Descuentos totales: <span th:text="${cart.totalDiscounts} + '%'"></span></h3>
         <ul>
             <li th:each="discount : ${cart.discountConditions}" th:text="${discount}"></li>
         </ul>
-
         <h3>Subtotal: <span th:text="${#numbers.formatCurrency(cart.subtotal)}"></span></h3>
         <h2>Precio final: <span th:text="${#numbers.formatCurrency(cart.totalFinal)}" ></span></h2>
 
