@@ -49,7 +49,7 @@ public class UserService {
         User user = UserMapper.toEntity(dto);
 
         /*Establece el rol USER*/
-        user.setRole(Role.USER);
+        user.setRole(Role.CLIENT);
 
         createUser(user);
     }

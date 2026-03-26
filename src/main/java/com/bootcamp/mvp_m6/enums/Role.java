@@ -5,5 +5,5 @@ package com.bootcamp.mvp_m6.enums;
  */
 public enum Role {
     ADMIN,
-    USER
+    CLIENT
 }
