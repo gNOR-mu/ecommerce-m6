@@ -22,19 +22,19 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping("/signing")
-    public String signing(Model model) {
+    @GetMapping("/signup")
+    public String signup(Model model) {
         model.addAttribute("user", new UserPublicRegisterDTO());
-        return "signing";
+        return "signup";
     }
 
-    @PostMapping("/signing")
-    public String signing(
+    @PostMapping("/signup")
+    public String signup(
             @Valid @ModelAttribute UserPublicRegisterDTO dto,
             BindingResult result
     ) {
         if (result.hasErrors()) {
-            return "signing";
+            return "signup";
         }
 
         userService.createPublicUser(dto);
