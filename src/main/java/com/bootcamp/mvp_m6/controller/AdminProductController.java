@@ -34,7 +34,7 @@ public class AdminProductController {
 
         ProductFormDTO product = id == null
                 ? new ProductFormDTO()
-                : productService.findById(id);
+                : productService.getProductForm(id);
 
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("categories", categoryService.findAll());
