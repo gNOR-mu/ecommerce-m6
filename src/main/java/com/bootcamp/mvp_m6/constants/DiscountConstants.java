@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 /**
  * Constantes para las reglas de descuento
+ * @apiNote Todos los descuentos se miden en porcentaje
  */
 public class DiscountConstants {
     private DiscountConstants(){}

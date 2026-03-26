@@ -1,0 +1,14 @@
+package com.bootcamp.mvp_m6.mapper;
+
+import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
+import com.bootcamp.mvp_m6.model.Cart;
+import org.mapstruct.Mapper;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {CartItemMapper.class})
+public interface CartMapper {
+
+    CartSummaryDTO toSummaryDTO(Cart cart, BigDecimal subtotal, BigDecimal totalDiscounts, BigDecimal totalFinal, List<String> discountNames);
+}

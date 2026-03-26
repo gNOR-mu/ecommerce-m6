@@ -13,7 +13,51 @@
 <body>
 
 <div class="content">
-    <!--TODO por agregar-->
+    <!--PRODUCTOS: SE MUESTRAN CUANDO LA LISTA DE ITEMS  ESTÁ VACÍA-->
+    <section th:if="${#lists.isEmpty(cart.items)}" class="container my-5">
+        <h1>Ningún producto en el carrito</h1>
+        <h2>¡Añadamos algunos!</h2>
+    </section>
+
+    <!--PRODUCTOS: SE MUESTRAN CUANDO LA LISTA DE ITEMS NO ESTÁ VACÍA-->
+    <section th:unless="${#lists.isEmpty(cart.items)}" class="container my-5">
+        <h1>Carrito de productos</h1>
+
+        <ul id="list-products" class="list-group my-4">
+            <li class="list-group-item bg-dark active " aria-current="true">
+                <div class="row">
+                    <div class="col-md-3">Nombre</div>
+                    <div class="col-md-3">Cantidad</div>
+                    <div class="col-md-3">Precio unitario</div>
+                    <div class="col-md-3">Precio total</div>
+                </div>
+            </li>
+
+            <li class="list-group-item" th:each="product: ${cart.items}">
+                <div class="row">
+                    <div class="col-md-3" th:text="${product.name}"></div>
+                    <div class="col-md-3" th:text="${product.quantity}"></div>
+                    <div class="col-md-3" th:text="${#numbers.formatCurrency(product.unitPrice)}"></div>
+                    <div class="col-md-3" th:text="${#numbers.formatCurrency(product.subTotal)}"></div>
+                </div>
+            </li>
+        </ul>
+
+        <h3>Descuentos totales:<span th:text="${cart.totalDiscounts} + '%'"></span></h3>
+        <ul>
+            <li th:each="discount : ${cart.discountConditions}" th:text="${discount}"></li>
+        </ul>
+
+        <h3>Subtotal: <span th:text="${#numbers.formatCurrency(cart.subtotal)}"></span></h3>
+        <h2>Precio final: <span th:text="${#numbers.formatCurrency(cart.totalFinal)}" ></span></h2>
+
+
+        <!--TODO form para pagar-->
+        <form method="post" th:action="@{/cart/checkout}">
+            <button type="submit" class="btn btn-sm btn-dark fw-bold">Pagar</button>
+        </form>
+    </section>
+
 </div>
 
 </body>
