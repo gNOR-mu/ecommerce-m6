@@ -80,11 +80,17 @@ public class ProductService {
      * @param id ID del producto
      * @return Producto con la id coincidente
      */
-    public ProductFormDTO findById(Long id) {
+    public ProductFormDTO getProductForm(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
         return productMapper.toDTO(product);
+    }
+
+    public Product getProduct(Long id){
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
     }
 
     /**
