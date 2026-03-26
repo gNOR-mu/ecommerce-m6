@@ -3,7 +3,7 @@ package com.bootcamp.mvp_m6.controller;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CartService;
 import com.bootcamp.mvp_m6.service.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice(basePackages = "com.bootcamp.mvp_m6.controller")
-@RequiredArgsConstructor
 public class GlobalControllerAdvice {
 
-    private final CartService cartService;
-    private final UserService userService;
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private UserService userService;
 
     /*Inyecta el nombre de la aplicación desde el properties*/
     @Value("${app.app-name}")

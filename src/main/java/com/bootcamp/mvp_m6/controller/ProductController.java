@@ -2,7 +2,7 @@ package com.bootcamp.mvp_m6.controller;
 
 import com.bootcamp.mvp_m6.service.ProductService;
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/products")
-@RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public String products(Model model){
