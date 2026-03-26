@@ -25,12 +25,18 @@
                 <h5 class="col" th:text="${product.shortDescription}"></h5>
                 <h6 class="col"><strong th:text="${#numbers.formatCurrency(product.price)}">$0.00</strong></h6>
 
-                <!--TODO implementar (sacado del mvp 2)-->
-                <div class="btn-group" role="group" aria-label="Manage products">
-                    <button id="btn-remove" type="button" class="btn btn-dark">-</button>
-                    <button type="button" class="btn btn-dark" id="product-quantity" disabled>0</button>
-                    <button id="btn-add" type="button" class="btn btn-dark">+</button>
-                </div>
+
+                <form th:action="@{/cart/add}" method="post" class="d-flex align-items-center mt-3">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+
+                    <input type="number" name="quantity" value="1" min="1"
+                           class="form-control form-control-sm me-2" style="width: 70px;">
+
+                    <button type="submit" class="btn btn-sm btn-warning fw-bold w-100">
+                        <i class="bi bi-cart-plus"></i> Añadir
+                    </button>
+                </form>
+
             </div>
         </div>
 

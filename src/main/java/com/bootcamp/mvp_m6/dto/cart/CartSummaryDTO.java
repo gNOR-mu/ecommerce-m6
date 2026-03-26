@@ -7,6 +7,7 @@ public record CartSummaryDTO(
         List<CartItemDTO> items,
         BigDecimal subtotal,
         BigDecimal totalDiscounts,
-        BigDecimal totalFinal
+        BigDecimal totalFinal,
+        List<String> discountConditions
 ) {
 }

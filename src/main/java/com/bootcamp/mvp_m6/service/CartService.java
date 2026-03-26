@@ -1,13 +1,20 @@
 package com.bootcamp.mvp_m6.service;
 
+import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
+import com.bootcamp.mvp_m6.mapper.CartMapper;
 import com.bootcamp.mvp_m6.model.Cart;
 import com.bootcamp.mvp_m6.model.CartItem;
 import com.bootcamp.mvp_m6.model.Product;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.repository.CartRepository;
+import com.bootcamp.mvp_m6.strategy.discount.DiscountRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servicio para manipular el carrito de compras
@@ -21,8 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
+    private final List<DiscountRule> discountRules;
 
     private final ProductService productService;
+
 
     /**
      * Obtiene el carro para el usuario que posee la sesión iniciada
@@ -38,7 +48,8 @@ public class CartService {
 
 
     @Transactional
-    private void addToCart(User user, Long productId, int quantity) {
+    public void addToCart(User user, Long productId, int quantity) {
+
         //primero obtengo el carro del usuario y el producto
         Cart cart = getCart(user);
         Product product = productService.getProduct(productId);
@@ -50,11 +61,12 @@ public class CartService {
         CartItem cartItem = cart.getItems().stream()
                 .filter(item -> item.getId().equals(productId))
                 .findFirst()
-                .orElseGet(null);
+                .orElse(null);
 
         if (cartItem != null) {
             Integer newQuantity = cartItem.getQuantity() + quantity;
             cartItem.setQuantity(newQuantity);
+
         } else {
             //nuevo producto
             CartItem newItem = CartItem.builder()
@@ -65,6 +77,57 @@ public class CartService {
 
             cart.getItems().add(newItem);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public CartSummaryDTO getCartSummary(User user) {
+        Cart cart = getCart(user);
+        List<String> discountNames = new ArrayList<>();
+
+
+        BigDecimal subtotal = cart.getItems().stream()
+                .map(CartItem::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+
+        //recorre todas las reglas de descuento, y en caso de ser aplicable, le sumo el descuento
+        for (DiscountRule rule : discountRules) {
+            if (rule.isApplicable(cart)) {
+                BigDecimal ruleDiscount = rule.calculateDiscount(cart);
+                totalDiscount = totalDiscount.add(ruleDiscount);
+
+                discountNames.add(rule.getCondition());
+            }
+        }
+
+        //si el descuento es negativo significaría que le aumento el precio, no debería pasar, pero por si acaso...
+        if(totalDiscount.compareTo(BigDecimal.ZERO) < 0){
+            totalDiscount = BigDecimal.ZERO;
+        }
+
+        //TODO tal vez sea mejor separar la lógica como el checkout del mvp2, verlo cuando implemente el checkout o lo dejo dentro del cartService
+        // como es un porcentaje divide por 100
+        BigDecimal discountedPrice = subtotal.multiply(totalDiscount.movePointLeft(2));
+        BigDecimal totalFinal = subtotal.subtract(discountedPrice);
+
+        if (totalFinal.compareTo(BigDecimal.ZERO) < 0) {
+            totalFinal = BigDecimal.ZERO;
+        }
+
+        return cartMapper.toSummaryDTO(cart, subtotal, totalDiscount, totalFinal, discountNames);
+    }
+
+    public int getCarItemCount(User user) {
+        Cart cart = getCart(user);
+
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            return 0;
+        }
+
+        return cart.getItems().stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
     }
 
 
@@ -78,5 +141,13 @@ public class CartService {
         Cart cart = new Cart();
         cart.setUser(user);
         return cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void removeFromCart(User user, Long productId) {
+        Cart cart = getCart(user);
+
+        cart.getItems()
+                .removeIf(item -> item.getProduct().getId().equals(productId));
     }
 }
