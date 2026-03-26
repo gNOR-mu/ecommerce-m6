@@ -59,9 +59,9 @@ public class ProductFormDTO {
     private List<String> featureValues = new ArrayList<>();
 
     public void buildFeaturesMap() {
-        this.features = new HashMap<>();
-
         if (featureKeys != null && featureValues != null) {
+            this.features = new HashMap<>();
+
             for (int i = 0; i < featureKeys.size(); i++) {
                 String key = featureKeys.get(i).trim();
                 String value = featureValues.get(i).trim();
