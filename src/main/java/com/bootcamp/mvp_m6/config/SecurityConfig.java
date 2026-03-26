@@ -20,14 +20,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //TODO
-
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/", "/signup", "/assets/**").permitAll()
+                        .requestMatchers("/products", "/cart").hasAnyRole(Role.ADMIN.name(), Role.CLIENT.name())
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-                        //TODO CAMBIAR
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email") //cambia el username a email
