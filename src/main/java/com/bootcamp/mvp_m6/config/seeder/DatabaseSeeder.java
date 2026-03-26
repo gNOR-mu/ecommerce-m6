@@ -38,7 +38,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         UserPrivateRegisterDTO admin = UserPrivateRegisterDTO.builder()
                 .email("admin@email.cl")
                 .password("admin1234")
-                .cellphone("+56900001111")
+                .lastName("Pérez")
                 .name("admin")
                 .role(Role.ADMIN)
                 .build();
@@ -47,7 +47,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         UserPublicRegisterDTO user = UserPublicRegisterDTO.builder()
                 .email("user@email.cl")
                 .password("user1234")
-                .cellphone("+56911112222")
+                .lastName("Pérez")
                 .name("usuario")
                 .build();
 

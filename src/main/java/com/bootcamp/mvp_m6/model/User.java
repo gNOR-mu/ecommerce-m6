@@ -26,7 +26,8 @@ public class User {
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
 
-    private String cellphone;
+    @NotBlank(message = "El apellido no puede estar en blanco")
+    private String lastName;
 
     @NotNull
     @Email(message = "Correo inválido")
