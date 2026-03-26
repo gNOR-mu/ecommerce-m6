@@ -10,5 +10,5 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {CartItemMapper.class})
 public interface CartMapper {
 
-    CartSummaryDTO toSummaryDTO(Cart cart, BigDecimal subtotal, BigDecimal totalDiscounts, BigDecimal totalFinal, List<String> discountNames);
+    CartSummaryDTO toSummaryDTO(Cart cart, BigDecimal subtotal, BigDecimal totalDiscounts, BigDecimal totalFinal, List<String> discountConditions);
 }

@@ -88,7 +88,7 @@ public class CartService {
     @Transactional(readOnly = true)
     public CartSummaryDTO getCartSummary(User user) {
         Cart cart = getCart(user);
-        List<String> discountNames = new ArrayList<>();
+        List<String> discountConditions = new ArrayList<>();
 
 
         BigDecimal subtotal = cart.getItems().stream()
@@ -103,7 +103,7 @@ public class CartService {
                 BigDecimal ruleDiscount = rule.calculateDiscount(cart);
                 totalDiscount = totalDiscount.add(ruleDiscount);
 
-                discountNames.add(rule.getCondition());
+                discountConditions.add(rule.getCondition());
             }
         }
 
@@ -121,7 +121,7 @@ public class CartService {
             totalFinal = BigDecimal.ZERO;
         }
 
-        return cartMapper.toSummaryDTO(cart, subtotal, totalDiscount, totalFinal, discountNames);
+        return cartMapper.toSummaryDTO(cart, subtotal, totalDiscount, totalFinal, discountConditions);
     }
 
     public int getCarItemCount(User user) {
