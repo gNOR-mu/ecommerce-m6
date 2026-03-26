@@ -10,7 +10,7 @@ public class UserMapper {
         return User.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())
-                .cellphone(dto.getCellphone())
+                .lastName(dto.getLastName())
                 .passHash(dto.getPassword())
                 .build();
     }
@@ -19,7 +19,7 @@ public class UserMapper {
         return User.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())
-                .cellphone(dto.getCellphone())
+                .lastName(dto.getLastName())
                 .role(dto.getRole())
                 .passHash(dto.getPassword())
                 .build();
