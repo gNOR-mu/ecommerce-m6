@@ -44,7 +44,7 @@ public class CartController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         User user = userService.getByEmail(userDetails.getUsername());
-        cartService.addToCart(user, productId, quantity);
+        cartService.addProductToCart(user, productId, quantity);
         return "redirect:/cart";
     }
 
