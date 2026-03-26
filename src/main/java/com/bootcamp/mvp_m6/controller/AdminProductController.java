@@ -6,7 +6,7 @@ import com.bootcamp.mvp_m6.service.CategoryService;
 import com.bootcamp.mvp_m6.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/products")
-@RequiredArgsConstructor
 public class AdminProductController {
 
-    private final ProductService productService;
-    private final CategoryService categoryService;
-    private final BrandService brandService;
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private BrandService brandService;
 
     @GetMapping
     public String productManagement(Model model) {
@@ -90,7 +94,7 @@ public class AdminProductController {
     @GetMapping("/search")
     public String search(
             Model model,
-            @RequestParam @NotNull String searchText){
+            @RequestParam @NotNull String searchText) {
 
         model.addAttribute("products", productService.search(searchText));
         return "admin/product";

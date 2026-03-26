@@ -5,7 +5,7 @@ import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CartService;
 import com.bootcamp.mvp_m6.service.UserService;
 import jakarta.validation.constraints.Min;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/cart")
-@RequiredArgsConstructor
 public class CartController {
 
-    private final CartService cartService;
-    private final UserService userService;
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private  UserService userService;
 
     @GetMapping
     public String cart(
