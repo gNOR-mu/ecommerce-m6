@@ -7,7 +7,7 @@
     <title>Registro</title>
 
     <th:block class="customCss">
-        <link rel="stylesheet" type="text/css" th:href="@{/assets/css/signing.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/assets/css/signup.css}">
     </th:block>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <div class="container-fluid p-0 flex-grow-1 d-flex max-vh-100 vh-100 row g-0 w-100 main-login-row">
         <!--IZQUIERDA: IMAGEN-->
         <div class="col-lg-7 d-none d-lg-block position-relative">
-            <img th:src="@{/assets/img/bg-signing.webp}"
+            <img th:src="@{/assets/img/bg-signup.webp}"
                  class="w-100 h-100 img-side"
                  alt="Fondo de aventura">
         </div>
@@ -27,7 +27,7 @@
             <div class="w-100 form-side">
                 <h2 class="mb-4 text-dark fw-bold text-center">¡ENCANTADO DE CONOCERTE!</h2>
 
-                <form method="post" th:action="@{/signing}">
+                <form method="post" th:action="@{/signup}">
                     <div class="mb-3">
                         <label for="name" class="form-label text-dark fw-semibold">Nombre</label>
                         <input type="text" class="form-control form-control-lg" id="name" name="name"
