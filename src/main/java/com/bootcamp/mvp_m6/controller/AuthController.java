@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public String signup(
-            @Valid @ModelAttribute UserPublicRegisterDTO dto,
+            @Valid @ModelAttribute("user") UserPublicRegisterDTO dto,
             BindingResult result
     ) {
         if (result.hasErrors()) {

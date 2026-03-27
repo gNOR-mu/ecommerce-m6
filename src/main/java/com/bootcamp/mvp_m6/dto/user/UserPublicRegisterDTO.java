@@ -16,7 +16,7 @@ public class UserPublicRegisterDTO {
     @NotBlank(message = "El apellido no puede estar en blanco")
     private String lastName;
 
-    @NotNull
+    @NotNull(message = "El correo no puede ser nulo")
     @Email(message = "Correo inválido")
     private String email;
 
