@@ -80,13 +80,18 @@ public class ProductService {
         Product existing = productRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Producto no encontrado"));
 
-        if(existing.getOrderItems().isEmpty()){
+
+        if (existing.getOrderItems().isEmpty() && existing.getCartItem().isEmpty()) {
             productRepository.deleteById(id);
 
-        }else{
+        } else {
+            //quito el producto de cualquier carrito que lo tenga
+            existing.removeAllCartItems();
+
             existing.setActive(false);
             productRepository.save(existing);
         }
+
 
     }
 
@@ -159,7 +164,9 @@ public class ProductService {
             Product product = mapProducts.get(item.getId());
             int newStock = product.getStock() - item.getQuantity();
 
-            //TODO validación producto activo
+            if (!product.isActive()) {
+                throw new RuntimeException("El producto '%s' se encuentra inactivo".formatted(product.getName()));
+            }
 
             if (newStock < 0) {
                 throw new RuntimeException("No hay stock disponible para: " + product.getName()

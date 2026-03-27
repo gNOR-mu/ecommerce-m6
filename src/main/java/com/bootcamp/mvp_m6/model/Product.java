@@ -72,5 +72,24 @@ public class Product {
     )
     private Set<OrderItem> orderItems = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<CartItem> cartItem = new HashSet<>();
+
+
+    /**
+     * Desvincula el producto de cualquier cartItem que lo tenga
+     */
+    public void removeAllCartItems() {
+        for (CartItem item : this.cartItem) {
+            item.setProduct(null);
+        }
+        this.cartItem.clear();
+    }
+
+
 
 }
