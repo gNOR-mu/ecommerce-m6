@@ -7,6 +7,7 @@ import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.enums.Role;
 import com.bootcamp.mvp_m6.model.*;
 import com.bootcamp.mvp_m6.repository.BrandRepository;
+import com.bootcamp.mvp_m6.repository.OrderRepository;
 import com.bootcamp.mvp_m6.repository.ProductRepository;
 import com.bootcamp.mvp_m6.repository.UserRepository;
 import com.bootcamp.mvp_m6.service.*;
@@ -51,6 +52,9 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Autowired
     private CheckoutService checkoutService;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -228,10 +232,13 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .build()
         ));
 
-        Optional<User> firstClientUser = userRepository.findByEmailWithOrders(firstClient.getEmail());
 
         //parece una aberración, cambiar cuando haya tiempo
-        if (firstClientUser.isPresent() && firstClientUser.get().getOrders().isEmpty()) {
+        if (!orderRepository.hasData()) {
+            Optional<User> firstClientUser = userRepository.findByEmail(firstClient.getEmail());
+            if(firstClientUser.isEmpty()){
+                return;
+            }
             cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(gafas.getId(), 1));
             cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(mochila.getId(), 3));
             cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(carpa.getId(), 2));
