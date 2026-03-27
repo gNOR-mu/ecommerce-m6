@@ -12,6 +12,9 @@ public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "orderItems", ignore = true)
+    @Mapping(target = "discountConditions", ignore = true)
+    @Mapping(target = "totalDiscounts", ignore = true)
+    @Mapping(target = "subtotal", ignore = true)
     Order toEntity(NewOrderDTO dto);
 
 }
