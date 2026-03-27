@@ -52,7 +52,7 @@
 
                                 <!--ELIMINAR-->
                                 <!--ELIMINAR PRODUCTO-->
-                                <form th:action="@{/cart/{id}(id=${product.id})}" th:method="delete"
+                                <form th:action="@{/cart/remove/{id}(id=${product.id})}" th:method="delete"
                                       th:attr="onsubmit=|return confirm('¿Estás seguro de que deseas eliminar ${product.name}?');|">
 
                                     <input type="hidden" name="id" th:value="${product.id}">

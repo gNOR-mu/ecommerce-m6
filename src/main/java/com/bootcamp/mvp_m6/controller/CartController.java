@@ -73,14 +73,18 @@ public class CartController {
     /**
      * Elimina completamente un producto del carrito
      */
-    @PostMapping("/remove")
+    @DeleteMapping("/remove/{id}")
     @PreAuthorize("isAuthenticated()")
     public String remove(
-            @RequestParam Long productId,
+            @PathVariable Long id,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        User user = userService.getByEmail(userDetails.getUsername());
-        cartService.removeFromCart(user, productId);
+         try{
+             User user = userService.getByEmail(userDetails.getUsername());
+             cartService.removeFromCart(user, id);
+         }catch (Exception e){
+             log.error("Ha ocurrido un error al intentar eliminar un producto del carrito: {}", e.getMessage());
+         }
         return "redirect:/cart";
     }
 
