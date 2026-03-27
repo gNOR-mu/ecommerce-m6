@@ -68,7 +68,8 @@ autenticación/autorización y la capa web con controladores y servicios.
 
 Credenciales válidas para iniciar sesión (creadas al iniciar la aplicación):
 
-| ROL   | EMAIL          | CONTRASEÑA |
-|-------|----------------|------------|
-| ADMIN | admin@email.cl | admin1234  |
-| USER  | user@email.cl  | user1234   |
+| ROL   | EMAIL              | CONTRASEÑA |
+|-------|--------------------|------------|
+| ADMIN | admin@email.cl     | admin1234  |
+| USER  | user@email.cl      | user1234   |
+| USER  | firstClient@mvp.cl | firstmvp   |
