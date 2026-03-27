@@ -71,12 +71,23 @@ public class ProductService {
     }
 
     /**
-     * Elimina un producto
+     * Elimina un producto.
      *
-     * @param id ID del producto
+     * @param id Id del producto
+     * @apiNote Si el producto tiene ventas lo deja inactivo
      */
     public void deleteById(Long id) {
-        productRepository.deleteById(id);
+        Product existing = productRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Producto no encontrado"));
+
+        if(existing.getOrderItems().isEmpty()){
+            productRepository.deleteById(id);
+
+        }else{
+            existing.setActive(false);
+            productRepository.save(existing);
+        }
+
     }
 
 

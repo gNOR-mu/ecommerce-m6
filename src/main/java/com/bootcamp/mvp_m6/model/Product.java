@@ -52,6 +52,10 @@ public class Product {
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> features = new HashMap<>();
 
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean active = true;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", nullable = false)

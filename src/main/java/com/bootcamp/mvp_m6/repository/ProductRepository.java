@@ -16,7 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
             SELECT new com.bootcamp.mvp_m6.dto.product.ProductResumeDTO(id, name, shortDescription, urlImage, price)
-            FROM Product
+            FROM Product p
+            WHERE p.active = true
             """)
     List<ProductResumeDTO> findAllResume();
 
@@ -31,6 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             FROM Product p
             JOIN p.brand b
             JOIN p.category c
+            WHERE p.active = true
             """)
     List<AdminProductListDTO> findAllAdmin();
 
@@ -45,6 +47,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                 shortDescription)
             FROM Product
             WHERE id = :id
+            AND active = true
             """)
     ProductInfoDTO findInfoById(@Param("id") Long id);
 
@@ -58,6 +61,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             SELECT new com.bootcamp.mvp_m6.dto.product.ProductResumeDTO(p.id, p.name, p.shortDescription, p.urlImage, p.price)
             FROM OrderItem oi
             JOIN oi.product p
+            WHERE p.active = true
             GROUP BY p.id, p.name, p.shortDescription, p.urlImage, p.price
             ORDER BY SUM(oi.quantity) DESC
             LIMIT 3
@@ -66,6 +70,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     /**
      * Busca productos que contengan la palabra clave por nombre de producto, nombre de categoría o nombre de marca
+     *
      * @param searchText Texto a buscar
      * @return Lista de los productos que contienen el texto especificado
      * @apiNote Ignora mayúsculas/minúsculas
@@ -82,6 +87,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             JOIN p.brand b
             JOIN p.category c
             WHERE p.name ILIKE %:searchText%
+            AND p.active = true
             OR c.name ILIKE %:searchText%
             or b.name ILIKE %:searchText%
             """)
