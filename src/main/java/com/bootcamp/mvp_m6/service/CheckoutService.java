@@ -22,7 +22,6 @@ public class CheckoutService {
     private final CartService cartService;
     private final ProductService productService;
     private final OrderService orderService;
-    private final OrderItemService orderItemService;
 
 
     /**
