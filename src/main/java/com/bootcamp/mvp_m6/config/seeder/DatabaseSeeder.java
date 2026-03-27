@@ -4,14 +4,10 @@ import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.enums.Role;
-import com.bootcamp.mvp_m6.model.Brand;
-import com.bootcamp.mvp_m6.model.Category;
-import com.bootcamp.mvp_m6.model.Product;
-import com.bootcamp.mvp_m6.service.BrandService;
-import com.bootcamp.mvp_m6.service.CategoryService;
-import com.bootcamp.mvp_m6.service.ProductService;
-import com.bootcamp.mvp_m6.service.UserService;
+import com.bootcamp.mvp_m6.model.*;
+import com.bootcamp.mvp_m6.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -19,21 +15,33 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
 
-    private final UserService userService;
-    private final BrandService brandService;
-    private final CategoryService categoryService;
-    private final ProductService productService;
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private CheckoutService checkoutService;
 
     @Override
     public void run(String... args) throws Exception {
-        seedUsers();
-        seedCatalog();
+        seed();
     }
 
-    private void seedUsers() {
+
+    private void seed() {
         /*Usuario administrado*/
         UserPrivateRegisterDTO admin = UserPrivateRegisterDTO.builder()
                 .email("admin@email.cl")
@@ -54,10 +62,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         userService.createPrivateUser(admin);
         userService.createPublicUser(user);
-    }
 
-
-    private void seedCatalog() {
         Brand maui = brandService.create(Brand.builder().name("Maui").build());
         Brand head = brandService.create(Brand.builder().name("Head").build());
         Brand rayBand = brandService.create(Brand.builder().name("Ray-Ban").build());
@@ -180,6 +185,14 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .build()
         );
 
+        User adminUser = userService.getByEmail(admin.getEmail());
+
+        cartService.addProductToCart(adminUser, gafas.getId(), 1);
+        cartService.addProductToCart(adminUser, mochila.getId(), 3);
+        cartService.addProductToCart(adminUser, carpa.getId(), 2);
+        cartService.addProductToCart(adminUser, bici.getId(), 1);
+
+        checkoutService.checkout(adminUser);
 
     }
 }
