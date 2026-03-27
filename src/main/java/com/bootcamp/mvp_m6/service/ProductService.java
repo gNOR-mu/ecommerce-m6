@@ -1,16 +1,22 @@
 package com.bootcamp.mvp_m6.service;
 
+import com.bootcamp.mvp_m6.dto.cart.CartItemDTO;
 import com.bootcamp.mvp_m6.dto.product.AdminProductListDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductResumeDTO;
 import com.bootcamp.mvp_m6.mapper.ProductMapper;
+import com.bootcamp.mvp_m6.model.Cart;
+import com.bootcamp.mvp_m6.model.CartItem;
 import com.bootcamp.mvp_m6.model.Product;
 import com.bootcamp.mvp_m6.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +93,7 @@ public class ProductService {
         return productMapper.toDTO(product);
     }
 
-    public Product getProduct(Long id){
+    public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
@@ -120,6 +126,41 @@ public class ProductService {
      */
     public List<AdminProductListDTO> search(String searchText) {
         return productRepository.search(searchText);
+    }
+
+    /**
+     * Valida que todos los productos del carrito sean válidos y luego reduce el stock
+     *
+     * @param cart Carrito contenedor de los productos
+     */
+    @Transactional
+    public void validateAndReduceStock(Cart cart) {
+        List<Long> productIds = cart.getItems().stream()
+                .map(CartItem::getId)
+                .toList();
+
+        List<Product> allCartProducts = productRepository.findAllById(productIds);
+
+        Map<Long, Product> mapProducts = allCartProducts.stream()
+                .collect(Collectors.toMap(Product::getId, product -> product));
+
+        for (CartItem item : cart.getItems()) {
+            Product product = mapProducts.get(item.getId());
+            int newStock = product.getStock() - item.getQuantity();
+
+            //TODO validación producto activo
+
+            if (newStock < 0) {
+                throw new RuntimeException("No hay stock disponible para: " + product.getName()
+                        + ", Requerido: " + item.getQuantity()
+                        + ", En stock: " + product.getStock()
+                );
+            }
+
+            product.setStock(newStock);
+
+            productRepository.save(product);
+        }
     }
 
     /*

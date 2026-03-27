@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.service;
 
+import com.bootcamp.mvp_m6.dto.cart.CartPricing;
 import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
 import com.bootcamp.mvp_m6.mapper.CartMapper;
 import com.bootcamp.mvp_m6.model.Cart;
@@ -49,9 +50,10 @@ public class CartService {
 
     /**
      * Añade un producto al carro actual del usuario
-     * @param user Usuario sobre el cual añadir el producto
+     *
+     * @param user      Usuario sobre el cual añadir el producto
      * @param productId Id del producto a añadir
-     * @param quantity Cantidad a añadir
+     * @param quantity  Cantidad a añadir
      */
     @Transactional
     public void addProductToCart(User user, Long productId, int quantity) {
@@ -88,40 +90,9 @@ public class CartService {
     @Transactional(readOnly = true)
     public CartSummaryDTO getCartSummary(User user) {
         Cart cart = getCart(user);
-        List<String> discountConditions = new ArrayList<>();
+        CartPricing cartPricing = calculatePricing(cart);
 
-
-        BigDecimal subtotal = cart.getItems().stream()
-                .map(CartItem::getSubTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal totalDiscount = BigDecimal.ZERO;
-
-        //recorre todas las reglas de descuento, y en caso de ser aplicable, le sumo el descuento
-        for (DiscountRule rule : discountRules) {
-            if (rule.isApplicable(cart)) {
-                BigDecimal ruleDiscount = rule.calculateDiscount(cart);
-                totalDiscount = totalDiscount.add(ruleDiscount);
-
-                discountConditions.add(rule.getCondition());
-            }
-        }
-
-        //si el descuento es negativo significaría que le aumento el precio, no debería pasar, pero por si acaso...
-        if(totalDiscount.compareTo(BigDecimal.ZERO) < 0){
-            totalDiscount = BigDecimal.ZERO;
-        }
-
-        //TODO tal vez sea mejor separar la lógica como el checkout del mvp2, verlo cuando implemente el checkout o lo dejo dentro del cartService
-        // como es un porcentaje divide por 100
-        BigDecimal discountedPrice = subtotal.multiply(totalDiscount.movePointLeft(2));
-        BigDecimal totalFinal = subtotal.subtract(discountedPrice);
-
-        if (totalFinal.compareTo(BigDecimal.ZERO) < 0) {
-            totalFinal = BigDecimal.ZERO;
-        }
-
-        return cartMapper.toSummaryDTO(cart, subtotal, totalDiscount, totalFinal, discountConditions);
+        return cartMapper.toSummaryDTO(cart, cartPricing);
     }
 
     public int getCarItemCount(User user) {
@@ -155,5 +126,50 @@ public class CartService {
 
         cart.getItems()
                 .removeIf(item -> item.getProduct().getId().equals(productId));
+    }
+
+    @Transactional
+    public void clearCart(User user) {
+        Cart cart = getCart(user);
+        cart.getItems().clear();
+    }
+
+    public CartPricing calculatePricing(Cart cart) {
+        List<String> discountConditions = new ArrayList<>();
+
+        //cálculo del subtotal
+        BigDecimal subtotal = cart.getItems().stream()
+                .map(CartItem::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //cálculo de descuentos
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+
+        //recorre todas las reglas de descuento, y en caso de ser aplicable, le sumo el descuento
+        for (DiscountRule rule : discountRules) {
+            if (rule.isApplicable(cart)) {
+                totalDiscount = totalDiscount.add(rule.calculateDiscount(cart));
+                discountConditions.add(rule.getCondition());
+            }
+        }
+
+        //si el descuento es negativo significaría que le aumento el precio, no debería pasar, pero por si acaso...
+        if (totalDiscount.compareTo(BigDecimal.ZERO) < 0) {
+            totalDiscount = BigDecimal.ZERO;
+        }
+
+        BigDecimal discountedPrice = subtotal.multiply(totalDiscount.movePointLeft(2));
+        BigDecimal totalFinal = subtotal.subtract(discountedPrice);
+
+        if (totalFinal.compareTo(BigDecimal.ZERO) < 0) {
+            totalFinal = BigDecimal.ZERO;
+        }
+
+        return new CartPricing(
+                subtotal,
+                totalDiscount,
+                totalFinal,
+                discountConditions
+        );
     }
 }

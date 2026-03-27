@@ -5,9 +5,6 @@ import java.util.List;
 
 public record CartSummaryDTO(
         List<CartItemDTO> items,
-        BigDecimal subtotal,
-        BigDecimal totalDiscounts,
-        BigDecimal totalFinal,
-        List<String> discountConditions
+        CartPricing cartPricing
 ) {
 }
