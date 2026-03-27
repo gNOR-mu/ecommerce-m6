@@ -114,6 +114,7 @@ public class CartService {
      * @param user Usuario sobre el cual asignar el carro
      * @return Carrito asignado
      */
+    @Transactional
     private Cart assignToUser(User user) {
         Cart cart = new Cart();
         cart.setUser(user);

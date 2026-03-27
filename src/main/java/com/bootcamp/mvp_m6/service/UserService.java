@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
+    @Transactional(readOnly = true)
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
@@ -30,6 +31,7 @@ public class UserService {
      * @param user Usuario a crear
      * @apiNote La contraseña viene en texto plano, por lo que se encripta antes de guardar
      */
+    @Transactional
     private void createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Usuario ya registrado");
@@ -45,6 +47,7 @@ public class UserService {
      *
      * @param dto DTO del nuevo usuario a crear
      */
+    @Transactional
     public void createPublicUser(UserPublicRegisterDTO dto) {
         User user = UserMapper.toEntity(dto);
 
@@ -59,6 +62,7 @@ public class UserService {
      *
      * @param dto DTO del nuevo usuario a crear
      */
+    @Transactional
     public void createPrivateUser(UserPrivateRegisterDTO dto) {
         User user = UserMapper.toEntity(dto);
 
