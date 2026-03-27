@@ -22,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public User getByEmail(String email) {
@@ -54,7 +55,7 @@ public class UserService {
      */
     @Transactional
     public void createPublicUser(UserPublicRegisterDTO dto) {
-        User user = UserMapper.toEntity(dto);
+        User user = userMapper.toEntity(dto);
 
         /*Establece el rol USER*/
         user.setRole(Role.CLIENT);
@@ -69,7 +70,7 @@ public class UserService {
      */
     @Transactional
     public void createPrivateUser(UserPrivateRegisterDTO dto) {
-        User user = UserMapper.toEntity(dto);
+        User user = userMapper.toEntity(dto);
 
         createUser(user);
     }

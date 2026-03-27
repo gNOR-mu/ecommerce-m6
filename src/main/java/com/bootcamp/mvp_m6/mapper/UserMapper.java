@@ -3,28 +3,24 @@ package com.bootcamp.mvp_m6.mapper;
 import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
 /**
  * Mapper para {@link User}
  */
-public class UserMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface UserMapper {
 
-    public static User toEntity(UserPublicRegisterDTO dto) {
-        return User.builder()
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .lastName(dto.getLastName())
-                .passHash(dto.getPassword())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "passHash", source = "password")
+    User toEntity(UserPublicRegisterDTO dto);
 
-    public static User toEntity(UserPrivateRegisterDTO dto) {
-        return User.builder()
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .lastName(dto.getLastName())
-                .role(dto.getRole())
-                .passHash(dto.getPassword())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "passHash", source = "password")
+    User toEntity(UserPrivateRegisterDTO dto);
 }
