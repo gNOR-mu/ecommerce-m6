@@ -52,6 +52,9 @@ public class Product {
     @Min(value = 0, message = "El stock no puede ser inferior a 0")
     private Integer stock;
 
+    @Column(unique = true, nullable = false, updatable = false)
+    private String sku;
+
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> features = new HashMap<>();
 

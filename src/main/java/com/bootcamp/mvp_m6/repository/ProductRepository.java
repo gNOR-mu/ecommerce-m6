@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -92,4 +93,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             or b.name ILIKE %:searchText%
             """)
     List<AdminProductListDTO> search(@Param("searchText") String searchText);
+
+    /**
+     * Busca un producto por el sku
+     * @param sku Sku a buscar
+     * @return Producto con el sku
+     */
+    Optional<Product> findBySku(String sku);
 }

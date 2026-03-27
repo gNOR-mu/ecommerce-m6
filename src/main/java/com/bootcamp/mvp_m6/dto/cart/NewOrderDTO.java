@@ -1,4 +1,4 @@
-package com.bootcamp.mvp_m6.dto;
+package com.bootcamp.mvp_m6.dto.cart;
 
 import com.bootcamp.mvp_m6.model.User;
 import jakarta.validation.constraints.DecimalMin;

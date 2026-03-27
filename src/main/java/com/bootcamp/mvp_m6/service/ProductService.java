@@ -9,6 +9,7 @@ import com.bootcamp.mvp_m6.model.Cart;
 import com.bootcamp.mvp_m6.model.CartItem;
 import com.bootcamp.mvp_m6.model.Product;
 import com.bootcamp.mvp_m6.repository.ProductRepository;
+import com.bootcamp.mvp_m6.util.UUIDGen;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,9 @@ public class ProductService {
 
         dto.buildFeaturesMap();
         Product product = productMapper.toEntity(dto);
+        if(product.getSku() == null || product.getSku().isEmpty()){
+            product.setSku(UUIDGen.generateSimpleSku());
+        }
 
         return productRepository.save(product);
     }

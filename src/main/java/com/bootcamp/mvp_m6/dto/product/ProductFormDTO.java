@@ -41,6 +41,8 @@ public class ProductFormDTO {
     @URL(message = "URL no valida")
     private String urlImage;
 
+    private String sku;
+
     @NotBlank(message = "La descripción no puede estar vacía")
     @Size(max = 1000, message = "El largo máximo para la descripción son 1000 caracteres")
     private String description;

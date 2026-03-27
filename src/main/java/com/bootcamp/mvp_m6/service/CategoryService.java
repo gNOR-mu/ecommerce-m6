@@ -3,7 +3,6 @@ package com.bootcamp.mvp_m6.service;
 import com.bootcamp.mvp_m6.exceptions.InvalidOperationException;
 import com.bootcamp.mvp_m6.model.Category;
 import com.bootcamp.mvp_m6.repository.CategoryRepository;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,5 +37,12 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public boolean existsById(Long categoryId) {
         return categoryRepository.existsById(categoryId);
+    }
+
+    @Transactional
+    public Category findOrCreate(String categoryName){
+        return categoryRepository.findByName(categoryName).orElseGet(
+                () -> categoryRepository.save(Category.builder().name(categoryName).build())
+        );
     }
 }

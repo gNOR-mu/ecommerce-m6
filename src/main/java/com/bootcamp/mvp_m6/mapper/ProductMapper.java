@@ -15,6 +15,7 @@ public interface ProductMapper {
     @Mapping(source = "brandId", target = "category.id")
     @Mapping(target = "orderItems", ignore = true)
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "cartItem", ignore = true)
     Product toEntity(ProductFormDTO dto);
 
     @Mapping(target = "brandId", source = "brand.id")
@@ -27,5 +28,6 @@ public interface ProductMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "brand", ignore = true)
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "cartItem", ignore = true)
     void updateEntityFromDTO(ProductFormDTO dto, @MappingTarget Product entity);
 }

@@ -25,6 +25,12 @@ public class BrandService {
 
         return brandRepository.save(brand);
     }
+    @Transactional
+    public Brand findOrCreate(String brandName){
+        return brandRepository.findByName(brandName).orElseGet(
+                () -> brandRepository.save(Brand.builder().name(brandName).build())
+        );
+    }
 
     @Transactional(readOnly = true)
     public List<Brand> findAll(){
