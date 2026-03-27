@@ -1,6 +1,5 @@
 package com.bootcamp.mvp_m6.service;
 
-import com.bootcamp.mvp_m6.dto.cart.CartItemDTO;
 import com.bootcamp.mvp_m6.dto.product.AdminProductListDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
@@ -14,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,9 +27,13 @@ public class ProductService {
     private final BrandService brandService;
     private final ProductMapper productMapper;
 
+    @Transactional
     public Product create(ProductFormDTO dto) {
+        validateFields(dto);
+
         dto.buildFeaturesMap();
         Product product = productMapper.toEntity(dto);
+
         return productRepository.save(product);
     }
 
@@ -38,6 +42,7 @@ public class ProductService {
      *
      * @return Una lista con los productos más vendidos
      */
+    @Transactional(readOnly = true)
     public List<ProductResumeDTO> getTopProducts() {
         return productRepository.getTopProducts();
     }
@@ -47,6 +52,7 @@ public class ProductService {
      *
      * @return Una lista con el resumen de todos los productos
      */
+    @Transactional(readOnly = true)
     public List<ProductResumeDTO> findAllResume() {
         return productRepository.findAllResume();
     }
@@ -57,6 +63,7 @@ public class ProductService {
      * @param id ID del producto
      * @return Información del producto
      */
+    @Transactional(readOnly = true)
     public ProductInfoDTO findInfoById(Long id) {
         return productRepository.findInfoById(id);
     }
@@ -66,6 +73,7 @@ public class ProductService {
      *
      * @return Una lista de todos los productos
      */
+    @Transactional(readOnly = true)
     public List<AdminProductListDTO> findAll() {
         return productRepository.findAllAdmin();
     }
@@ -76,6 +84,7 @@ public class ProductService {
      * @param id Id del producto
      * @apiNote Si el producto tiene ventas lo deja inactivo
      */
+    @Transactional
     public void deleteById(Long id) {
         Product existing = productRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Producto no encontrado"));
@@ -102,6 +111,7 @@ public class ProductService {
      * @param id ID del producto
      * @return Producto con la id coincidente
      */
+    @Transactional(readOnly = true)
     public ProductFormDTO getProductForm(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
@@ -109,6 +119,7 @@ public class ProductService {
         return productMapper.toDTO(product);
     }
 
+    @Transactional(readOnly = true)
     public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
@@ -120,7 +131,10 @@ public class ProductService {
      *
      * @param dto Producto a editar
      */
+    @Transactional
     public void update(Long id, ProductFormDTO dto) {
+        validateFields(dto);
+
         Product existing = productRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
@@ -140,6 +154,7 @@ public class ProductService {
      * @param searchText Texto a buscar
      * @return Listado con los productos coincidentes
      */
+    @Transactional(readOnly = true)
     public List<AdminProductListDTO> search(String searchText) {
         return productRepository.search(searchText);
     }
@@ -181,13 +196,11 @@ public class ProductService {
         }
     }
 
-    /*
 
-
-     *//**
+     /**
      * Valida los campos de un producto
      * @param product Producto a validar
-     *//*
+     */
     private void validateFields(ProductFormDTO product) {
         if (product.getName() == null || product.getName().isBlank()) {
             throw new IllegalArgumentException("El nombre del producto no puede ser vacío ni estar en blanco");
@@ -201,12 +214,12 @@ public class ProductService {
             throw new IllegalArgumentException("El stock no puede ser negativo");
         }
 
-        if (product.getCategoryId() == null || !categoryDAO.existsById(product.getCategoryId())) {
+        if (product.getCategoryId() == null || !categoryService.existsById(product.getCategoryId())) {
             throw new IllegalArgumentException("La ID de categoría no existe");
         }
 
-        if (product.getBrandId() == null || !brandDAO.existsById(product.getBrandId())) {
+        if (product.getBrandId() == null || !brandService.existsById(product.getBrandId())) {
             throw new IllegalArgumentException("La ID de marca no existe");
         }
-    }*/
+    }
 }
