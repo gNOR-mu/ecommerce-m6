@@ -1,7 +1,6 @@
 package com.bootcamp.mvp_m6.service;
 
 import com.bootcamp.mvp_m6.dto.cart.CartPricing;
-import com.bootcamp.mvp_m6.mapper.OrderMapper;
 import com.bootcamp.mvp_m6.model.*;
 import com.bootcamp.mvp_m6.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CartService cartService;
-    private final OrderMapper orderMapper;
 
     @Transactional
     public Order createFromCart(User user) {

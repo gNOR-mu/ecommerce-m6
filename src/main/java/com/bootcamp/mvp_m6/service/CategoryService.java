@@ -1,6 +1,7 @@
 package com.bootcamp.mvp_m6.service;
 
 import com.bootcamp.mvp_m6.exceptions.InvalidOperationException;
+import com.bootcamp.mvp_m6.exceptions.ResourceAlreadyExistsException;
 import com.bootcamp.mvp_m6.model.Category;
 import com.bootcamp.mvp_m6.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class CategoryService {
     @Transactional
     public Category create(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
-            throw new InvalidOperationException("Ya existe una categoría con el nombre: " + category.getName());
+            throw new ResourceAlreadyExistsException("Category", "name", category.getName());
         }
         return categoryRepository.save(category);
     }
@@ -30,7 +31,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Category getReferenceById(Long id){
+    public Category getReferenceById(Long id) {
         return categoryRepository.getReferenceById(id);
     }
 
@@ -40,7 +41,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category findOrCreate(String categoryName){
+    public Category findOrCreate(String categoryName) {
         return categoryRepository.findByName(categoryName).orElseGet(
                 () -> categoryRepository.save(Category.builder().name(categoryName).build())
         );
