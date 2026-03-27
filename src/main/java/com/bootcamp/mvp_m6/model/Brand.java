@@ -13,7 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "brands")
+@Table(name = "brands", indexes = {
+        @Index(name = "idx_brand_name", columnList = "name")
+})
 public class Brand {
 
     @Id
