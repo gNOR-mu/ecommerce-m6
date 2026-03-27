@@ -22,37 +22,44 @@
     <!--PRODUCTOS: SE MUESTRAN CUANDO LA LISTA DE ITEMS NO ESTÁ VACÍA-->
     <section th:unless="${#lists.isEmpty(cart.items)}" class="container my-5">
         <h1>Carrito de productos</h1>
+        <div class="row">
+            <ul id="list-products" class="list-group my-4 col-9">
+                <li class="list-group-item bg-dark active " aria-current="true">
+                    <div class="row">
+                        <div class="col-md-3">Nombre</div>
+                        <div class="col-md-3">Cantidad</div>
+                        <div class="col-md-3">Precio unitario</div>
+                        <div class="col-md-3">Precio total</div>
+                    </div>
+                </li>
 
-        <ul id="list-products" class="list-group my-4">
-            <li class="list-group-item bg-dark active " aria-current="true">
-                <div class="row">
-                    <div class="col-md-3">Nombre</div>
-                    <div class="col-md-3">Cantidad</div>
-                    <div class="col-md-3">Precio unitario</div>
-                    <div class="col-md-3">Precio total</div>
-                </div>
-            </li>
+                <li class="list-group-item" th:each="product: ${cart.items}">
+                    <div class="row">
+                        <div class="col-md-3" th:text="${product.name}"></div>
+                        <div class="col-md-3" th:text="${product.quantity}"></div>
+                        <div class="col-md-3" th:text="${#numbers.formatCurrency(product.unitPrice)}"></div>
+                        <div class="col-md-3" th:text="${#numbers.formatCurrency(product.subTotal)}"></div>
+                    </div>
+                </li>
+            </ul>
+            <div class="col border rounded p-2">
+                <h3>Resumen de la orden</h3>
+                <h4>Descuentos totales: <span th:text="${cart.cartPricing.totalDiscounts} + '%'"></span></h4>
+                <ul>
+                    <li th:each="discount : ${cart.cartPricing.discountConditions}" th:text="${discount}"></li>
+                </ul>
+                <hr>
 
-            <li class="list-group-item" th:each="product: ${cart.items}">
-                <div class="row">
-                    <div class="col-md-3" th:text="${product.name}"></div>
-                    <div class="col-md-3" th:text="${product.quantity}"></div>
-                    <div class="col-md-3" th:text="${#numbers.formatCurrency(product.unitPrice)}"></div>
-                    <div class="col-md-3" th:text="${#numbers.formatCurrency(product.subTotal)}"></div>
-                </div>
-            </li>
-        </ul>
-        <h3>Descuentos totales: <span th:text="${cart.cartPricing.totalDiscounts} + '%'"></span></h3>
-        <ul>
-            <li th:each="discount : ${cart.cartPricing.discountConditions}" th:text="${discount}"></li>
-        </ul>
-        <h3>Subtotal: <span th:text="${#numbers.formatCurrency(cart.cartPricing.subtotal)}"></span></h3>
-        <h2>Precio final: <span th:text="${#numbers.formatCurrency(cart.cartPricing.totalFinal)}" ></span></h2>
+                <h4>Subtotal: <span th:text="${#numbers.formatCurrency(cart.cartPricing.subtotal)}"></span></h4>
+                <hr>
 
+                <h3>Precio final: <span th:text="${#numbers.formatCurrency(cart.cartPricing.totalFinal)}"></span></h3>
 
-        <form method="post" th:action="@{/checkout}">
-            <button type="submit" class="btn btn-sm btn-dark fw-bold">Pagar</button>
-        </form>
+                <form method="post" th:action="@{/checkout}">
+                    <button type="submit" class="btn btn-dark fw-bold w-100">Pagar</button>
+                </form>
+            </div>
+        </div>
     </section>
 
 </div>
