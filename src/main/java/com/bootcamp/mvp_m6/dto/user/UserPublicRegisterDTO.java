@@ -3,6 +3,9 @@ package com.bootcamp.mvp_m6.dto.user;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+/**
+ * DTO para el registro de un usuario público
+ */
 @Getter
 @Setter
 @Builder

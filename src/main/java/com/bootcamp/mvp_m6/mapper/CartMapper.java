@@ -5,9 +5,9 @@ import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
 import com.bootcamp.mvp_m6.model.Cart;
 import org.mapstruct.Mapper;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+/**
+ * Mapper para {@link Cart}
+ */
 @Mapper(componentModel = "spring", uses = {CartItemMapper.class})
 public interface CartMapper {
 

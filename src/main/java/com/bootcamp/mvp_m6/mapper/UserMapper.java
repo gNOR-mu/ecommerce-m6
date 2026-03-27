@@ -4,6 +4,9 @@ import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.model.User;
 
+/**
+ * Mapper para {@link User}
+ */
 public class UserMapper {
 
     public static User toEntity(UserPublicRegisterDTO dto) {

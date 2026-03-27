@@ -6,8 +6,9 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO para añadir productos a un carrito
- * @param productId
- * @param quantity
+ *
+ * @param productId Id del producto
+ * @param quantity  Cantidad a añadir
  */
 public record AddToCartDTO(
         @NotNull
@@ -16,4 +17,5 @@ public record AddToCartDTO(
         @Min(value = 1, message = "Mínimo 1 producto")
         @Max(value = 5, message = "No puedes agregar más de 5")
         Integer quantity
-) {}
+) {
+}

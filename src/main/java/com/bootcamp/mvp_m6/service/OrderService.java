@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Servicio para las órdenes
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -14,6 +17,11 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
 
+    /**
+     * Crea una orden a partir del carrito de un usuario
+     * @param user Usuario relacionado con el carrito
+     * @return Orden creada
+     */
     @Transactional
     public Order createFromCart(User user) {
         Cart cart = cartService.getCart(user);

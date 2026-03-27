@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Servicio para los usuarios
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -31,6 +34,7 @@ public class UserService {
      *
      * @param user Usuario a crear
      * @apiNote La contraseña viene en texto plano, por lo que se encripta antes de guardar
+     * @throws ResourceAlreadyExistsException cuando un email ya existe
      */
     @Transactional
     private void createUser(User user) {
@@ -44,7 +48,7 @@ public class UserService {
     }
 
     /**
-     * Crea un nuevo usuario público con ROL: USER
+     * Crea un nuevo usuario público con ROL: CLIENT
      *
      * @param dto DTO del nuevo usuario a crear
      */

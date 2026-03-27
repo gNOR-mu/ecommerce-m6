@@ -5,6 +5,9 @@ import com.bootcamp.mvp_m6.model.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * Mapper para {@link CartItem}
+ */
 @Mapper(componentModel = "spring")
 public interface CartItemMapper {
 

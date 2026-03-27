@@ -10,12 +10,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * Servicio personalizado para el DetailsService
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getByEmail(email);

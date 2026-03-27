@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controlador para realizar el pago
+ */
 @Controller
 @RequestMapping("/checkout")
 @Slf4j
@@ -25,12 +28,22 @@ public class CheckoutController {
     @Autowired
     private CheckoutService checkoutService;
 
+    /**
+     * Muestra la página checkout.
+     * @return nombre de la plantilla Thymeleaf a renderizar (checkout)
+     */
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String checkout() {
         return "checkout";
     }
 
+    /**
+     * Realiza el checkout
+     * @param userDetails UserDetails entregado por Spring Boot
+     * @param redirectAttributes RedirectAttributes entregado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a redireccionar (redirect:/checkout)
+     */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public String checkout(@AuthenticationPrincipal UserDetails userDetails,

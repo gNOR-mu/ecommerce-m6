@@ -12,9 +12,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repositorio para operar sobre Product en la base de datos
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    /**
+     * Busca un resumen de todos los productos activos
+     * @return Lista DTO con todos los productos ({@link  ProductResumeDTO})
+     */
     @Query("""
             SELECT new com.bootcamp.mvp_m6.dto.product.ProductResumeDTO(id, name, shortDescription, urlImage, price)
             FROM Product p
@@ -22,6 +29,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             """)
     List<ProductResumeDTO> findAllResume();
 
+    /**
+     * Busca todos los productos activos como administrador
+     * @return Lista DTO de todos los productos activos ({@link AdminProductListDTO})
+     */
     @Query("""
             SELECT new com.bootcamp.mvp_m6.dto.product.AdminProductListDTO(
                 p.id,
@@ -37,6 +48,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             """)
     List<AdminProductListDTO> findAllAdmin();
 
+    /**
+     * Busca información de un producto a partir de su id
+     * @param id Id del producto
+     * @return DTO del producto coincidente
+     */
     @Query("""
             SELECT new com.bootcamp.mvp_m6.dto.product.ProductInfoDTO(
                 id,

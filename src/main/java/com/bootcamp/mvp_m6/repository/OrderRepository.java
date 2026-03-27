@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repositorio para operar sobre Order en la base de datos
+ */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 

@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio para los productos
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -30,6 +33,12 @@ public class ProductService {
     private final BrandService brandService;
     private final ProductMapper productMapper;
 
+    /**
+     * Crea un nuevo producto
+     *
+     * @param dto DTO del producto a crear
+     * @return producto creado
+     */
     @Transactional
     public Product create(ProductFormDTO dto) {
         validateFields(dto);
@@ -88,6 +97,7 @@ public class ProductService {
      * Elimina un producto.
      *
      * @param id Id del producto
+     * @throws ResourceNotFoundException Cuando no se encuentra la id del producto
      * @apiNote Si el producto tiene ventas lo deja inactivo
      */
     @Transactional
@@ -115,6 +125,7 @@ public class ProductService {
      *
      * @param id ID del producto
      * @return Producto con la id coincidente
+     * @throws ResourceNotFoundException Cuando no se encuentra la id del producto
      */
     @Transactional(readOnly = true)
     public ProductFormDTO getProductForm(Long id) {
@@ -125,6 +136,13 @@ public class ProductService {
         return productMapper.toDTO(product);
     }
 
+    /**
+     * Obtiene un producto a partir de su id
+     *
+     * @param id id del producto
+     * @return Producto con la id coincidente
+     * @throws ResourceNotFoundException Cuando no se encuentra la id del producto
+     */
     @Transactional(readOnly = true)
     public Product getProduct(Long id) {
         return productRepository.findById(id)
@@ -136,6 +154,7 @@ public class ProductService {
      * Edita un producto
      *
      * @param dto Producto a editar
+     * @throws ResourceNotFoundException Cuando no se encuentra la id del producto
      */
     @Transactional
     public void update(Long id, ProductFormDTO dto) {
@@ -169,6 +188,8 @@ public class ProductService {
      * Valida que todos los productos del carrito sean válidos y luego reduce el stock
      *
      * @param cart Carrito contenedor de los productos
+     * @throws InvalidOperationException Cuando el producto está inactivo
+     * @throws InvalidOperationException Cuando no hay stock disponible
      */
     @Transactional
     public void validateAndReduceStock(Cart cart) {
@@ -208,6 +229,11 @@ public class ProductService {
      * Valida los campos de un producto
      *
      * @param product Producto a validar
+     * @throws InvalidOperationException cuando el nombre del producto está vacío
+     * @throws  InvalidOperationException cuando el precio es <= 0
+     * @throws  InvalidOperationException Cuando el stock es negativo
+     * @throws ResourceNotFoundException cuando no existe la id de categoría
+     * @throws ResourceNotFoundException cuando no existe la id de marca
      */
     private void validateFields(ProductFormDTO product) {
         if (product.getName() == null || product.getName().isBlank()) {
