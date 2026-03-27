@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.service;
 
+import com.bootcamp.mvp_m6.dto.cart.AddToCartDTO;
 import com.bootcamp.mvp_m6.dto.cart.CartPricing;
 import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
 import com.bootcamp.mvp_m6.mapper.CartMapper;
@@ -52,15 +53,14 @@ public class CartService {
      * Añade un producto al carro actual del usuario
      *
      * @param user      Usuario sobre el cual añadir el producto
-     * @param productId Id del producto a añadir
-     * @param quantity  Cantidad a añadir
+     * @param dto Dto con info del producto a agregar
      */
     @Transactional
-    public void addProductToCart(User user, Long productId, int quantity) {
+    public void addProductToCart(User user, AddToCartDTO dto) {
 
         //primero obtengo el carro del usuario y el producto
         Cart cart = getCart(user);
-        Product product = productService.getProduct(productId);
+        Product product = productService.getProduct(dto.productId());
 
 
         // verifico si el producto ya lo tengo en el carro
@@ -68,11 +68,11 @@ public class CartService {
         // si lo tengo solo le añado la cantidad
 
         CartItem cartItem = cart.getItems().stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
+                .filter(item -> item.getProduct().getId().equals(dto.productId()))
                 .findFirst()
                 .orElse(null);
 
-        int newQuantity = cartItem == null ? quantity : cartItem.getQuantity() + quantity;
+        int newQuantity = cartItem == null ? dto.quantity() : cartItem.getQuantity() + dto.quantity();
 
         if (product.getStock() - newQuantity < 0) {
             throw new IllegalArgumentException("No se ha podido agregar el producto '%s' debido a que no queda stock suficiente".formatted(product.getName()));
@@ -85,7 +85,7 @@ public class CartService {
             //nuevo producto
             CartItem newItem = CartItem.builder()
                     .cart(cart)
-                    .quantity(quantity)
+                    .quantity(dto.quantity())
                     .product(product)
                     .build();
 

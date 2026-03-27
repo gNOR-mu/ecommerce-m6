@@ -1,30 +1,35 @@
 package com.bootcamp.mvp_m6.controller;
 
+import com.bootcamp.mvp_m6.dto.cart.AddToCartDTO;
 import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CartService;
+import com.bootcamp.mvp_m6.service.ProductService;
 import com.bootcamp.mvp_m6.service.UserService;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/cart")
 public class CartController {
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private CartService cartService;
 
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     @GetMapping
     public String cart(
@@ -41,12 +46,27 @@ public class CartController {
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
     public String add(
-            @RequestParam Long productId,
-            @RequestParam @Min(value = 1) int quantity,
-            @AuthenticationPrincipal UserDetails userDetails
+            @Valid @ModelAttribute("addToCart") AddToCartDTO dto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
-        User user = userService.getByEmail(userDetails.getUsername());
-        cartService.addProductToCart(user, productId, quantity);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("product", productService.findInfoById(dto.productId()));
+            model.addAttribute("addToCart", dto);
+            return "productId";
+        }
+
+        try {
+            User user = userService.getByEmail(userDetails.getUsername());
+            cartService.addProductToCart(user, dto);
+        } catch (Exception e) {
+            log.error("Error al añadir un producto al carro: {}", e.getMessage());
+            model.addAttribute("errorMessage", "No se ha podido agregar debido a que no hay stock suficiente :(");
+            model.addAttribute("product", productService.findInfoById(dto.productId()));
+            model.addAttribute("addToCart", dto);
+            return "productId";
+        }
         return "redirect:/cart";
     }
 

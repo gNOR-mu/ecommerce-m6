@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.config.seeder;
 
+import com.bootcamp.mvp_m6.dto.cart.AddToCartDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
@@ -187,10 +188,10 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         User adminUser = userService.getByEmail(admin.getEmail());
 
-        cartService.addProductToCart(adminUser, gafas.getId(), 1);
-        cartService.addProductToCart(adminUser, mochila.getId(), 3);
-        cartService.addProductToCart(adminUser, carpa.getId(), 2);
-        cartService.addProductToCart(adminUser, bici.getId(), 1);
+        cartService.addProductToCart(adminUser, new AddToCartDTO(gafas.getId(), 1));
+        cartService.addProductToCart(adminUser, new AddToCartDTO(mochila.getId(), 3));
+        cartService.addProductToCart(adminUser, new AddToCartDTO(carpa.getId(), 2));
+        cartService.addProductToCart(adminUser, new AddToCartDTO(bici.getId(), 1));
 
         checkoutService.checkout(adminUser);
 
