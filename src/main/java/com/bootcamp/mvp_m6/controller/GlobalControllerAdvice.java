@@ -3,6 +3,7 @@ package com.bootcamp.mvp_m6.controller;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CartService;
 import com.bootcamp.mvp_m6.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +34,15 @@ public class GlobalControllerAdvice {
         return appName;
     }
 
+    /**
+     * Inyecta la URI activa
+     * @param request
+     * @return URI actual
+     */
+    @ModelAttribute("requestURI")
+    public String getRequestURI(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
 
     @ModelAttribute("cartItemCount")
     public int globalCartItemCount(@AuthenticationPrincipal UserDetails userDetails) {
