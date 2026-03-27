@@ -13,6 +13,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Modelo orden de la base de datos
+ *
+ * @author Gabriel Norambuena
+ * @version 1.0
+ */
 @Entity
 @Getter
 @Setter

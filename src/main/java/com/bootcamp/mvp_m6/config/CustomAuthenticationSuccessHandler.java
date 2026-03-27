@@ -12,9 +12,17 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Autenticador personalizado para manipular el inicio de sesión exitoso.
+ * Redirige a los usuarios con rol "ADMIN" a la ruta /admin/products, y a los usuarios con rol "CLIENT" a la ruta /products
+ *
+ */
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -25,9 +33,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 .map(GrantedAuthority::getAuthority).filter(Objects::nonNull)
                 .anyMatch(role -> role.equals("ROLE_" + Role.ADMIN));
 
-        if(isAdmin){
+        if (isAdmin) {
             response.sendRedirect("/admin/products");
-        }else{
+        } else {
             response.sendRedirect("/products");
         }
     }

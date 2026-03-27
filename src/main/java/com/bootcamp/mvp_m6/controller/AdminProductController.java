@@ -14,6 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controlador para la administración de productos como administrador
+ */
 @Controller
 @RequestMapping("/admin/products")
 @Slf4j
@@ -28,12 +31,28 @@ public class AdminProductController {
     @Autowired
     private BrandService brandService;
 
+    /**
+     * Muestra la página de administración de productos
+     *
+     * @param model Model entregado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a renderizar (admin/product)
+     */
     @GetMapping
     public String productManagement(Model model) {
         model.addAttribute("products", productService.findAll());
         return "admin/product";
     }
 
+    /**
+     * Muestra el formulario de creación o actualización de un producto.
+     * <p></p>
+     * Cuando se suministra el parámetro "id", se busca el objeto en la base de datos.
+     * En caso de no se suministre el parámetro "Id", se entrega un objeto vacío
+     *
+     * @param id    Id (opcional) del producto
+     * @param model Model entregado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a renderizar (admin/productForm)
+     */
     @GetMapping("/form")
     public String newProduct(
             @RequestParam(required = false) Long id,
@@ -50,6 +69,16 @@ public class AdminProductController {
         return "admin/productForm";
     }
 
+    /**
+     *
+     * @param id                 Identificación del objeto a eliminar
+     * @param redirectAttributes RedirectAttributes otorgado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a redireccionar (redirect:/admin/products)
+     * @apiNote <p>
+     * Se añade "successMessage" como FlashAttribute si el producto es eliminado exitosamente.
+     * Se añade "errorMessage" como FlashAttribute si ocurre un error al eliminar el producto
+     * </p>
+     */
     @DeleteMapping("/{id}")
     public String deleteProduct(
             @PathVariable @NotNull Long id,
@@ -69,8 +98,16 @@ public class AdminProductController {
     /**
      * Crea un nuevo producto
      *
-     * @param dto DTO con información del producto a crear
-     * @return Redirección hacia /admin/products
+     * @param dto                DTO con información del producto a crear
+     * @param bindingResult      BindingResult otorgado por Spring Boot
+     * @param redirectAttributes RedirectAttributes otorgado por Spring Boot
+     * @param model              Model otorgado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a renderizar, si hay error: admin/productForm, en caso exitoso: redirección
+     * hacia admin/products
+     * @apiNote <p>
+     * Se añade "successMessage" como FlashAttribute si el producto es creado exitosamente.
+     * Se añade "errorMessage" como FlashAttribute si ocurre un error al crear el producto
+     * </p>
      */
     @PostMapping
     public String saveProduct(
@@ -86,10 +123,10 @@ public class AdminProductController {
             return "admin/productForm";
         }
 
-        try{
+        try {
             productService.create(dto);
             redirectAttributes.addFlashAttribute("successMessage", "Producto %s creado.".formatted(dto.getName()));
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error al intentar crear un producto: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al intentar crear el producto");
         }
@@ -100,8 +137,16 @@ public class AdminProductController {
     /**
      * Actualiza un producto
      *
-     * @param dto DTO con información del producto a crear
-     * @return Redirección hacia /admin/products
+     * @param dto                DTO con información del producto a crear
+     * @param id                 Id del producto a actualizar
+     * @param bindingResult      BindingResult otorgado por Spring Boot
+     * @param redirectAttributes RedirectAttributes otorgado por Spring Boot
+     * @return nombre de la plantilla Thymeleaf a renderizar, si hay error: admin/productForm, en caso exitoso: redirección
+     * hacia admin/products
+     * @apiNote <p>
+     * Se añade "successMessage" como FlashAttribute si el producto es actualizado exitosamente.
+     * Se añade "errorMessage" como FlashAttribute si ocurre un error al actualizar el producto
+     * </p>
      */
     @PutMapping("/{id}")
     public String updateProduct(
@@ -113,16 +158,23 @@ public class AdminProductController {
         if (bindingResult.hasErrors()) {
             return "admin/productForm";
         }
-        try{
+        try {
             productService.update(id, dto);
             redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error al intentar actualizar un producto: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al intentar actualizar el producto");
         }
         return "redirect:/admin/products";
     }
 
+    /**
+     * Busca productos por nombre/categoría/marca
+     *
+     * @param model      Modelo otorgado por Spring Boot
+     * @param searchText Texto a buscar
+     * @return nombre de la plantilla Thymeleaf a renderizar (admin/product)
+     */
     @GetMapping("/search")
     public String search(
             Model model,

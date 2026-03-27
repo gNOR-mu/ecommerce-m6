@@ -8,10 +8,23 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repositorio para operar sobre User en la base de datos
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    /**
+     * Busca un usuario por su email
+     * @param email Email del usuario
+     * @return Usuario coincidente
+     */
     Optional<User> findByEmail(String email);
 
+    /**
+     * Verifica si existe un usuario por su email
+     * @param email Email del usuario
+     * @return Verdadero si el email existe, falso en caso contrario
+     */
     boolean existsByEmail(String email);
 }

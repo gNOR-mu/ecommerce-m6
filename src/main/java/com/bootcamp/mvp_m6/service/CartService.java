@@ -55,6 +55,7 @@ public class CartService {
      *
      * @param user Usuario sobre el cual añadir el producto
      * @param dto  Dto con info del producto a agregar
+     * @throws InvalidOperationException Cuando se intenta agregar más cantidad del stock disponible
      */
     @Transactional
     public void addProductToCart(User user, AddToCartDTO dto) {
@@ -94,6 +95,11 @@ public class CartService {
         }
     }
 
+    /**
+     * Obtiene el resumen de un carrito
+     * @param user Usuario relacionado con carrito
+     * @return DTO con resumen del carrito
+     */
     @Transactional(readOnly = true)
     public CartSummaryDTO getCartSummary(User user) {
         Cart cart = getCart(user);
@@ -128,6 +134,11 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
+    /**
+     * Remueve un producto del carrito
+     * @param user Usuario relacionado con el carrito
+     * @param productId Id del producto a remover
+     */
     @Transactional
     public void removeFromCart(User user, Long productId) {
         Cart cart = getCart(user);
@@ -136,12 +147,21 @@ public class CartService {
                 .removeIf(item -> item.getProduct().getId().equals(productId));
     }
 
+    /**
+     * Limpia el carrito de un usuario
+     * @param user Usuario relacionado con el carrito
+     */
     @Transactional
     public void clearCart(User user) {
         Cart cart = getCart(user);
         cart.getItems().clear();
     }
 
+    /**
+     * Calcula el precio de un carrito
+     * @param cart Carrito sobre el que calcular
+     * @return Precios calculados del carrito
+     */
     public CartPricing calculatePricing(Cart cart) {
         List<String> discountConditions = new ArrayList<>();
 

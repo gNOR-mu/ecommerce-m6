@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO para el registro de un usuario privado
+ */
 @Getter
 @Setter
 @Builder

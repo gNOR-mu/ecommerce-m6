@@ -8,6 +8,12 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Modelo orden item de la base de datos.
+ * Contiene información respecto a los productos de una orden determinada.
+ * @author Gabriel Norambuena
+ * @version 1.0
+ */
 @Entity
 @Getter
 @Setter

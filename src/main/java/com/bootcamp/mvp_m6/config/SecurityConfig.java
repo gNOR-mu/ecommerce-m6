@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configuración de seguridad
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -18,6 +21,18 @@ public class SecurityConfig {
 
     private final CustomAuthenticationSuccessHandler authHandler;
 
+    /**
+     * Configuración de cadena de filtros de seguridad para la app
+     * <ul>
+     *     <li>Permite para todos: /, /signup, /assets/**</li>
+     *     <li>Permite para los roles ADMIN y CLIENT: /products, /cart</li>
+     *     <li>Permite solo para admin: /admin/**</li>
+     *     <li>Cualquier otra ruta debe estar autenticada</li>
+     * </ul>
+     * @param http Objeto {@link  HttpSecurity} proporcionado por Spring Boot
+     * @return Cadena de filtros construida ({@link SecurityFilterChain})
+     * @throws Exception Si ocurre algún error en la construcción de la cadena de filtros
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
@@ -48,6 +63,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Bean para el PasswordEncoder, utiliza {@link  BCryptPasswordEncoder}
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

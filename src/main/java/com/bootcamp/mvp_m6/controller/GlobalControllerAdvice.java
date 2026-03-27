@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+/**
+ * Global Controller Advice para manipular variables globales en los controladores
+ */
 @ControllerAdvice(basePackages = "com.bootcamp.mvp_m6.controller")
 public class GlobalControllerAdvice {
 
@@ -36,7 +39,7 @@ public class GlobalControllerAdvice {
 
     /**
      * Inyecta la URI activa
-     * @param request
+     * @param request HttpServletRequest con información del request
      * @return URI actual
      */
     @ModelAttribute("requestURI")
@@ -44,6 +47,11 @@ public class GlobalControllerAdvice {
         return request.getRequestURI();
     }
 
+    /**
+     * Cuenta la cantidad de objetos en el carrito para el usuario con la sesión iniciada
+     * @param userDetails UserDetails entregado por Spring Boot
+     * @return cantidad de objetos en el carrito
+     */
     @ModelAttribute("cartItemCount")
     public int globalCartItemCount(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
