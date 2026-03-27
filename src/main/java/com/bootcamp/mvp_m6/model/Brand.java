@@ -25,6 +25,7 @@ public class Brand {
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "brand",
             cascade = CascadeType.ALL,

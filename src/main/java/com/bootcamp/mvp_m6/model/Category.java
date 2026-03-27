@@ -25,6 +25,7 @@ public class Category {
     @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "category",
             cascade = CascadeType.ALL,
