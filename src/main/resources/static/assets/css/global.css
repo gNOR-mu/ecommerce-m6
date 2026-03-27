@@ -18,3 +18,8 @@
     object-fit: cover;
     object-position: center;
 }
+
+.actual-page {
+    text-decoration: underline !important;
+    color: white !important;
+}
