@@ -22,27 +22,52 @@
     <!--PRODUCTOS: SE MUESTRAN CUANDO LA LISTA DE ITEMS NO ESTÁ VACÍA-->
     <section th:unless="${#lists.isEmpty(cart.items)}" class="container my-5">
         <h1>Carrito de productos</h1>
-        <div class="row">
-            <ul id="list-products" class="list-group my-4 col-9">
-                <li class="list-group-item bg-dark active " aria-current="true">
-                    <div class="row">
-                        <div class="col-md-3">Nombre</div>
-                        <div class="col-md-3">Cantidad</div>
-                        <div class="col-md-3">Precio unitario</div>
-                        <div class="col-md-3">Precio total</div>
-                    </div>
-                </li>
 
-                <li class="list-group-item" th:each="product: ${cart.items}">
-                    <div class="row">
-                        <div class="col-md-3" th:text="${product.name}"></div>
-                        <div class="col-md-3" th:text="${product.quantity}"></div>
-                        <div class="col-md-3" th:text="${#numbers.formatCurrency(product.unitPrice)}"></div>
-                        <div class="col-md-3" th:text="${#numbers.formatCurrency(product.subTotal)}"></div>
-                    </div>
-                </li>
-            </ul>
-            <div class="col border rounded p-2">
+        <div class="row">
+            <div class="col-lg-8">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Precio unitario</th>
+                        <th scope="col">Precio total</th>
+                        <th scope="col" class="text-center">Acción</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="product: ${cart.items}">
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.quantity}"></td>
+                        <td th:text="${#numbers.formatCurrency(product.unitPrice)}"></td>
+                        <td th:text="${#numbers.formatCurrency(product.subTotal)}"></td>
+                        <td class="align-middle">
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <!-- PÁGINA DEL PRODUCTO-->
+                                <a class="btn" title="Ver" th:href="@{/products/{id}(id=${product.id})}">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                <!--ELIMINAR-->
+                                <!--ELIMINAR PRODUCTO-->
+                                <form th:action="@{/cart/{id}(id=${product.id})}" th:method="delete"
+                                      th:attr="onsubmit=|return confirm('¿Estás seguro de que deseas eliminar ${product.name}?');|">
+
+                                    <input type="hidden" name="id" th:value="${product.id}">
+
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4 border rounded p-2">
                 <h3>Resumen de la orden</h3>
                 <h4>Descuentos totales: <span th:text="${cart.cartPricing.totalDiscounts} + '%'"></span></h4>
                 <ul>
