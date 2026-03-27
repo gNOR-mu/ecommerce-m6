@@ -25,15 +25,18 @@
         </div>
     </section>
 
+    <!--PRODUCTOS DESTACADOS-->
     <section class="container mt-5 text-center" th:if="${!#lists.isEmpty(topProducts)}">
         <h2 class=" m-5">Productos destacados</h2>
-        <div class="row gap-3 justify-content-center" th:each="product : ${topProducts}">
-            <article class="col-lg card p-0 product-card">
+        <div class="row gap-3 justify-content-center">
+            <article th:each="product : ${topProducts}" class="col-lg card p-0 product-card">
                 <a th:href="@{/products/{id}(id = ${product.id})}" class="product-card-link">
-                    <img th:src="${product.urlImage}" class="card-img-top product-card-img" th:alt="${product.name}">
+                    <img th:src="${product.urlImage}"
+                         th:alt="${product.name}"
+                         class="card-img-top product-card-img">
                     <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text">${product.shortDescription}</p>
+                        <h5 th:text="${product.name}" class="card-title"></h5>
+                        <p th:text="${product.shortDescription}" class="card-text"></p>
                         <span><strong th:text="${#numbers.formatCurrency(product.price)}">$0.00</strong></span>
                     </div>
                 </a>
