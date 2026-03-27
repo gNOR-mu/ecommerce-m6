@@ -35,6 +35,7 @@
                 </div>
             </div>
 
+
             <div class="d-flex flex-row gap-3">
                 <!--CATEGORÍA-->
                 <div class="col mb-3">
@@ -149,6 +150,19 @@
                     Precio inválido
                 </div>
             </div>
+            <!--SKU-->
+            <div class="mb-3">
+                <label for="sku" class="form-label fw-semibold">SKU</label>
+                <input type="text"
+                       class="form-control form-control-lg"
+                       th:field="*{sku}"
+                       th:errorclass="is-invalid">
+
+                <!--ERROR-->
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}">
+                    SKU inválido
+                </div>
+            </div>
 
             <!-- CARACTERÍSTICAS -->
             <div id="features-container">
@@ -171,6 +185,7 @@
                     </div>
                 </div>
             </div>
+
 
             <button type="button" class="btn btn-outline-primary mt-2" onclick="addFeatureRow()">
                 <i class="bi bi-plus-circle me-1"></i> Agregar característica

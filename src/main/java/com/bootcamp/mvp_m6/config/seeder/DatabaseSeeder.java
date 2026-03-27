@@ -6,20 +6,33 @@ import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.enums.Role;
 import com.bootcamp.mvp_m6.model.*;
+import com.bootcamp.mvp_m6.repository.BrandRepository;
+import com.bootcamp.mvp_m6.repository.ProductRepository;
+import com.bootcamp.mvp_m6.repository.UserRepository;
 import com.bootcamp.mvp_m6.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
+/**
+ * Inicializador de datos para la base de datos
+ */
 @Component
+@Slf4j
 public class DatabaseSeeder implements CommandLineRunner {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private BrandService brandService;
@@ -29,6 +42,9 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private CartService cartService;
@@ -42,6 +58,9 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
 
+    /**
+     * Inicializa los datos en la BD
+     */
     private void seed() {
         /*Usuario administrado*/
         UserPrivateRegisterDTO admin = UserPrivateRegisterDTO.builder()
@@ -60,22 +79,41 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .name("usuario")
                 .build();
 
+        /*Usuario normal*/
+        UserPublicRegisterDTO firstClient = UserPublicRegisterDTO.builder()
+                .email("firstClient@mvp.cl")
+                .password("first")
+                .lastName("client")
+                .name("usuario")
+                .build();
 
-        userService.createPrivateUser(admin);
-        userService.createPublicUser(user);
+        if (!userRepository.existsByEmail(admin.getEmail())) {
+            userService.createPrivateUser(admin);
+            log.info("Seeder: Admin añadido");
+        }
 
-        Brand maui = brandService.create(Brand.builder().name("Maui").build());
-        Brand head = brandService.create(Brand.builder().name("Head").build());
-        Brand rayBand = brandService.create(Brand.builder().name("Ray-Ban").build());
-        Brand totem = brandService.create(Brand.builder().name("Totem").build());
+        if (!userRepository.existsByEmail(user.getEmail())) {
+            userService.createPublicUser(user);
+            log.info("Seeder: usuario añadido");
+        }
 
-        Category ropa = categoryService.create(Category.builder().name("Ropa").build());
-        Category expedicion = categoryService.create(Category.builder().name("Expedición").build());
-        Category accesorios = categoryService.create(Category.builder().name("Accesorios").build());
-        Category deporte = categoryService.create(Category.builder().name("Deporte").build());
+        if (!userRepository.existsByEmail(firstClient.getEmail())) {
+            userService.createPublicUser(firstClient);
+            log.info("Seeder: usuario del primer cliente añadido");
+        }
 
-        //evaluar moverlo a un archivo aparte
-        Product mochila = productService.create(ProductFormDTO.builder()
+        Brand maui = brandService.findOrCreate("Maui");
+        Brand head = brandService.findOrCreate("Head");
+        Brand rayBand = brandService.findOrCreate("Ray-Ban");
+        Brand totem = brandService.findOrCreate("Totem");
+
+        Category ropa = categoryService.findOrCreate("Ropa");
+        Category expedicion = categoryService.findOrCreate("Expedición");
+        Category accesorios = categoryService.findOrCreate("Accesorios");
+        Category deporte = categoryService.findOrCreate("Deporte");
+
+        Product mochila = productRepository.findBySku("MO-1").orElse(productService.create(ProductFormDTO.builder()
+                .sku("MO-1")
                 .categoryId(expedicion.getId())
                 .brandId(head.getId())
                 .price(new BigDecimal("85000.0"))
@@ -96,11 +134,12 @@ public class DatabaseSeeder implements CommandLineRunner {
                         "Bolsillos", 5
                 ))
                 .build()
-        );
+        ));
 
 
-        Product bici = productService.create(ProductFormDTO.builder()
+        Product bici = productRepository.findBySku("BI-0").orElse(productService.create(ProductFormDTO.builder()
                 .categoryId(deporte.getId())
+                .sku("BI-0")
                 .brandId(totem.getId())
                 .price(new BigDecimal("220000"))
                 .shortDescription("Bicicleta de montaña rodado 29, 27 velocidades")
@@ -121,10 +160,11 @@ public class DatabaseSeeder implements CommandLineRunner {
                         "Cuadro", "Aluminio"
                 ))
                 .build()
-        );
+        ));
 
-        Product carpa = productService.create(ProductFormDTO.builder()
+        Product carpa = productRepository.findBySku("TI-0").orElse(productService.create(ProductFormDTO.builder()
                 .categoryId(expedicion.getId())
+                .sku("TI-0")
                 .brandId(maui.getId())
                 .price(new BigDecimal("145000"))
                 .shortDescription("Tienda de campaña resistente a lluvias")
@@ -142,10 +182,11 @@ public class DatabaseSeeder implements CommandLineRunner {
                         "Peso", "4.5kg"
                 ))
                 .build()
-        );
+        ));
 
-        Product chaqueta = productService.create(ProductFormDTO.builder()
+        Product chaqueta = productRepository.findBySku("CH-0").orElse(productService.create(ProductFormDTO.builder()
                 .categoryId(ropa.getId())
+                .sku("CH-0")
                 .brandId(head.getId())
                 .price(new BigDecimal("85000"))
                 .shortDescription("Chaqueta resistente al agua")
@@ -163,10 +204,11 @@ public class DatabaseSeeder implements CommandLineRunner {
                         "Bolsillos con cierre", 2
                 ))
                 .build()
-        );
+        ));
 
-        Product gafas = productService.create(ProductFormDTO.builder()
+        Product gafas = productRepository.findBySku("GA-0").orElse(productService.create(ProductFormDTO.builder()
                 .categoryId(accesorios.getId())
+                .sku("GA-0")
                 .brandId(rayBand.getId())
                 .price(new BigDecimal("115000"))
                 .shortDescription("Gafas de sol con protección UV400")
@@ -184,16 +226,21 @@ public class DatabaseSeeder implements CommandLineRunner {
                         "Material marco", "Metal"
                 ))
                 .build()
-        );
+        ));
 
-        User adminUser = userService.getByEmail(admin.getEmail());
+        Optional<User> firstClientUser = userRepository.findByEmailWithOrders(firstClient.getEmail());
 
-        cartService.addProductToCart(adminUser, new AddToCartDTO(gafas.getId(), 1));
-        cartService.addProductToCart(adminUser, new AddToCartDTO(mochila.getId(), 3));
-        cartService.addProductToCart(adminUser, new AddToCartDTO(carpa.getId(), 2));
-        cartService.addProductToCart(adminUser, new AddToCartDTO(bici.getId(), 1));
+        //parece una aberración, cambiar cuando haya tiempo
+        if (firstClientUser.isPresent() && firstClientUser.get().getOrders().isEmpty()) {
+            cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(gafas.getId(), 1));
+            cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(mochila.getId(), 3));
+            cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(carpa.getId(), 2));
+            cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(bici.getId(), 1));
 
-        checkoutService.checkout(adminUser);
+            checkoutService.checkout(firstClientUser.get());
+            log.info("Seeder: Primera venta concretada");
+        }
+
 
     }
 }
