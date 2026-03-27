@@ -62,6 +62,7 @@ public class CartService {
         Cart cart = getCart(user);
         Product product = productService.getProduct(productId);
 
+
         // verifico si el producto ya lo tengo en el carro
         // si no lo tengo, lo tengo que crear
         // si lo tengo solo le añado la cantidad
@@ -71,8 +72,13 @@ public class CartService {
                 .findFirst()
                 .orElse(null);
 
+        int newQuantity = cartItem == null ? quantity : cartItem.getQuantity() + quantity;
+
+        if (product.getStock() - newQuantity < 0) {
+            throw new IllegalArgumentException("No se ha podido agregar el producto '%s' debido a que no queda stock suficiente".formatted(product.getName()));
+        }
+
         if (cartItem != null) {
-            Integer newQuantity = cartItem.getQuantity() + quantity;
             cartItem.setQuantity(newQuantity);
 
         } else {
