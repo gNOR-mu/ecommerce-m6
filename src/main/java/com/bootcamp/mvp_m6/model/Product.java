@@ -55,6 +55,7 @@ public class Product {
     @Column(unique = true, nullable = false, updatable = false)
     private String sku;
 
+    @Builder.Default
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> features = new HashMap<>();
 
@@ -71,6 +72,7 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
@@ -78,6 +80,7 @@ public class Product {
     )
     private Set<OrderItem> orderItems = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
@@ -95,7 +98,6 @@ public class Product {
         }
         this.cartItem.clear();
     }
-
 
 
 }

@@ -42,6 +42,7 @@ public class User {
     @NotBlank(message = "La contraseña no puede estar en blanco")
     private String passHash;
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,

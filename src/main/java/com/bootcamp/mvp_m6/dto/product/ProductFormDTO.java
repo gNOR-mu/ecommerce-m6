@@ -32,6 +32,7 @@ public class ProductFormDTO {
     @DecimalMin(value = "1.0", message = "El precio no puede ser inferior a 1.0")
     private BigDecimal price;
 
+    @Builder.Default
     private Map<String, Object> features = new HashMap<>();
 
     @NotBlank(message = "El nombre no puede estar en blanco")
@@ -57,7 +58,10 @@ public class ProductFormDTO {
 
 
     // Claves y valores de las características, adaptado del controlador del mvp5 aquí
+    @Builder.Default
     private List<String> featureKeys = new ArrayList<>();
+
+    @Builder.Default
     private List<String> featureValues = new ArrayList<>();
 
     public void buildFeaturesMap() {
