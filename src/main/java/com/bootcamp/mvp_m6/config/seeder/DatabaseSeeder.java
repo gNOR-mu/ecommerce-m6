@@ -82,7 +82,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         /*Usuario normal*/
         UserPublicRegisterDTO firstClient = UserPublicRegisterDTO.builder()
                 .email("firstClient@mvp.cl")
-                .password("first")
+                .password("firstmvp")
                 .lastName("client")
                 .name("usuario")
                 .build();
