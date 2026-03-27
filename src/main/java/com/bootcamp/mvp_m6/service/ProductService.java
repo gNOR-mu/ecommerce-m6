@@ -167,7 +167,7 @@ public class ProductService {
     @Transactional
     public void validateAndReduceStock(Cart cart) {
         List<Long> productIds = cart.getItems().stream()
-                .map(CartItem::getId)
+                .map(item -> item.getProduct().getId())
                 .toList();
 
         List<Product> allCartProducts = productRepository.findAllById(productIds);
@@ -176,7 +176,8 @@ public class ProductService {
                 .collect(Collectors.toMap(Product::getId, product -> product));
 
         for (CartItem item : cart.getItems()) {
-            Product product = mapProducts.get(item.getId());
+            Product product = mapProducts.get(item.getProduct().getId());
+
             int newStock = product.getStock() - item.getQuantity();
 
             if (!product.isActive()) {
