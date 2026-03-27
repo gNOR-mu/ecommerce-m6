@@ -75,27 +75,29 @@
 
                 <td th:text="${product.stock}">0</td>
 
-                <td class="d-flex justify-content-center">
-                    <!-- PÁGINA DEL PRODUCTO-->
-                    <a class="btn" title="Ver" th:href="@{/products/{id}(id=${product.id})}">
-                        <i class="bi bi-eye"></i>
-                    </a>
+                <td class="align-middle">
+                   <div class="d-flex justify-content-center">
+                       <!-- PÁGINA DEL PRODUCTO-->
+                       <a class="btn" title="Ver" th:href="@{/products/{id}(id=${product.id})}">
+                           <i class="bi bi-eye"></i>
+                       </a>
 
-                    <!--EDITAR PRODUCTO-->
-                    <a class="btn" title="Editar" th:href="@{/admin/products/form(id=${product.id})}">
-                        <i class="bi bi-pencil"></i>
-                    </a>
+                       <!--EDITAR PRODUCTO-->
+                       <a class="btn" title="Editar" th:href="@{/admin/products/form(id=${product.id})}">
+                           <i class="bi bi-pencil"></i>
+                       </a>
 
-                    <!--ELIMINAR PRODUCTO-->
-                    <form th:action="@{/admin/products/{id}(id=${product.id})}" th:method="delete"
-                          th:attr="onsubmit=|return confirm('¿Estás seguro de que deseas eliminar ${product.name}? Esta acción no se puede deshacer.');|">
+                       <!--ELIMINAR PRODUCTO-->
+                       <form th:action="@{/admin/products/{id}(id=${product.id})}" th:method="delete"
+                             th:attr="onsubmit=|return confirm('¿Estás seguro de que deseas eliminar ${product.name}? Esta acción no se puede deshacer.');|">
 
-                        <input type="hidden" name="id" th:value="${product.id}">
+                           <input type="hidden" name="id" th:value="${product.id}">
 
-                        <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
-                            <i class="bi bi-trash3"></i>
-                        </button>
-                    </form>
+                           <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
+                               <i class="bi bi-trash3"></i>
+                           </button>
+                       </form>
+                   </div>
                 </td>
             </tr>
 
