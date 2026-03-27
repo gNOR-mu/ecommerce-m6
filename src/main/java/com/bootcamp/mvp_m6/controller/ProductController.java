@@ -1,5 +1,6 @@
 package com.bootcamp.mvp_m6.controller;
 
+import com.bootcamp.mvp_m6.dto.cart.AddToCartDTO;
 import com.bootcamp.mvp_m6.service.ProductService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,16 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public String products(Model model){
+    public String products(Model model) {
         model.addAttribute("products", productService.findAllResume());
         return "products";
     }
 
     @GetMapping("/{id}")
     public String products(Model model,
-                           @NotNull @PathVariable Long id){
+                           @NotNull @PathVariable Long id) {
         model.addAttribute("product", productService.findInfoById(id));
+        model.addAttribute("addToCart", new AddToCartDTO(id, 1));
         return "productId";
     }
 }
