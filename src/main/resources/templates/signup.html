@@ -29,14 +29,15 @@
 
                 <!--FORM-->
                 <form method="post" th:action="@{/signup}" th:object="${user}">
-                   <!--NOMBRE-->
+                    <!--NOMBRE-->
                     <div class="mb-3">
                         <label for="name" class="form-label text-dark fw-semibold">Nombre</label>
                         <input type="text"
                                class="form-control form-control-lg"
                                th:field="*{name}"
                                th:errorclass="is-invalid"
-                               placeholder="Juan">
+                               placeholder="Juan"
+                               required>
                         <!--ERROR-->
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
                             Nombre inválido
@@ -50,7 +51,8 @@
                                class="form-control form-control-lg"
                                th:field="*{lastName}"
                                th:errorclass="is-invalid"
-                               placeholder="Pérez" required>
+                               placeholder="Pérez"
+                               required>
 
                         <!--ERROR APELLIDO-->
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
@@ -65,7 +67,8 @@
                                class="form-control form-control-lg"
                                th:field="*{email}"
                                th:errorclass="is-invalid"
-                               placeholder="correo@ejemplo.cl" required>
+                               placeholder="correo@ejemplo.cl"
+                               required>
 
                         <!--ERROR EMAIL-->
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
@@ -80,7 +83,8 @@
                                th:field="*{password}"
                                th:errorclass="is-invalid"
                                minlength="8" maxlength="100"
-                               placeholder="********" required>
+                               placeholder="********"
+                               required>
 
                         <!--ERROR CONTRASEÑA-->
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
