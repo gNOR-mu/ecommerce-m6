@@ -3,6 +3,7 @@ package com.bootcamp.mvp_m6.service;
 import com.bootcamp.mvp_m6.dto.user.UserPrivateRegisterDTO;
 import com.bootcamp.mvp_m6.dto.user.UserPublicRegisterDTO;
 import com.bootcamp.mvp_m6.enums.Role;
+import com.bootcamp.mvp_m6.exceptions.ResourceAlreadyExistsException;
 import com.bootcamp.mvp_m6.mapper.UserMapper;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.repository.UserRepository;
@@ -34,7 +35,7 @@ public class UserService {
     @Transactional
     private void createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Usuario ya registrado");
+            throw new ResourceAlreadyExistsException("User", "email", user.getEmail());
         }
 
         user.setPassHash(passwordEncoder.encode(user.getPassHash()));

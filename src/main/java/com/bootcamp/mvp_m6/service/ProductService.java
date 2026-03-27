@@ -4,6 +4,8 @@ import com.bootcamp.mvp_m6.dto.product.AdminProductListDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductFormDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductInfoDTO;
 import com.bootcamp.mvp_m6.dto.product.ProductResumeDTO;
+import com.bootcamp.mvp_m6.exceptions.InvalidOperationException;
+import com.bootcamp.mvp_m6.exceptions.ResourceNotFoundException;
 import com.bootcamp.mvp_m6.mapper.ProductMapper;
 import com.bootcamp.mvp_m6.model.Cart;
 import com.bootcamp.mvp_m6.model.CartItem;
@@ -34,7 +36,7 @@ public class ProductService {
 
         dto.buildFeaturesMap();
         Product product = productMapper.toEntity(dto);
-        if(product.getSku() == null || product.getSku().isEmpty()){
+        if (product.getSku() == null || product.getSku().isEmpty()) {
             product.setSku(UUIDGen.generateSimpleSku());
         }
 
@@ -90,9 +92,8 @@ public class ProductService {
      */
     @Transactional
     public void deleteById(Long id) {
-        Product existing = productRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("Producto no encontrado"));
-
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         if (existing.getOrderItems().isEmpty() && existing.getCartItem().isEmpty()) {
             productRepository.deleteById(id);
@@ -118,7 +119,8 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductFormDTO getProductForm(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+
 
         return productMapper.toDTO(product);
     }
@@ -126,7 +128,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product getProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
     }
 
@@ -139,8 +141,8 @@ public class ProductService {
     public void update(Long id, ProductFormDTO dto) {
         validateFields(dto);
 
-        Product existing = productRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         dto.buildFeaturesMap();
 
@@ -185,11 +187,11 @@ public class ProductService {
             int newStock = product.getStock() - item.getQuantity();
 
             if (!product.isActive()) {
-                throw new RuntimeException("El producto '%s' se encuentra inactivo".formatted(product.getName()));
+                throw new InvalidOperationException("El producto '%s' se encuentra inactivo".formatted(product.getName()));
             }
 
             if (newStock < 0) {
-                throw new RuntimeException("No hay stock disponible para: " + product.getName()
+                throw new InvalidOperationException("No hay stock disponible para: " + product.getName()
                         + ", Requerido: " + item.getQuantity()
                         + ", En stock: " + product.getStock()
                 );
@@ -202,29 +204,30 @@ public class ProductService {
     }
 
 
-     /**
+    /**
      * Valida los campos de un producto
+     *
      * @param product Producto a validar
      */
     private void validateFields(ProductFormDTO product) {
         if (product.getName() == null || product.getName().isBlank()) {
-            throw new IllegalArgumentException("El nombre del producto no puede ser vacío ni estar en blanco");
+            throw new InvalidOperationException("El nombre del producto no puede ser vacío ni estar en blanco");
         }
 
         if (product.getPrice() == null || product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor a 0");
+            throw new InvalidOperationException("El precio debe ser mayor a 0");
         }
 
         if (product.getStock() < 0) {
-            throw new IllegalArgumentException("El stock no puede ser negativo");
+            throw new InvalidOperationException("El stock no puede ser negativo");
         }
 
         if (product.getCategoryId() == null || !categoryService.existsById(product.getCategoryId())) {
-            throw new IllegalArgumentException("La ID de categoría no existe");
+            throw new ResourceNotFoundException("Category", product.getCategoryId());
         }
 
         if (product.getBrandId() == null || !brandService.existsById(product.getBrandId())) {
-            throw new IllegalArgumentException("La ID de marca no existe");
+            throw new ResourceNotFoundException("Brand", product.getBrandId());
         }
     }
 }

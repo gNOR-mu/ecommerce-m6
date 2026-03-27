@@ -3,6 +3,7 @@ package com.bootcamp.mvp_m6.service;
 import com.bootcamp.mvp_m6.dto.cart.AddToCartDTO;
 import com.bootcamp.mvp_m6.dto.cart.CartPricing;
 import com.bootcamp.mvp_m6.dto.cart.CartSummaryDTO;
+import com.bootcamp.mvp_m6.exceptions.InvalidOperationException;
 import com.bootcamp.mvp_m6.mapper.CartMapper;
 import com.bootcamp.mvp_m6.model.Cart;
 import com.bootcamp.mvp_m6.model.CartItem;
@@ -52,8 +53,8 @@ public class CartService {
     /**
      * Añade un producto al carro actual del usuario
      *
-     * @param user      Usuario sobre el cual añadir el producto
-     * @param dto Dto con info del producto a agregar
+     * @param user Usuario sobre el cual añadir el producto
+     * @param dto  Dto con info del producto a agregar
      */
     @Transactional
     public void addProductToCart(User user, AddToCartDTO dto) {
@@ -75,7 +76,7 @@ public class CartService {
         int newQuantity = cartItem == null ? dto.quantity() : cartItem.getQuantity() + dto.quantity();
 
         if (product.getStock() - newQuantity < 0) {
-            throw new IllegalArgumentException("No se ha podido agregar el producto '%s' debido a que no queda stock suficiente".formatted(product.getName()));
+            throw new InvalidOperationException("No se ha podido agregar el producto '%s' debido a que no queda stock suficiente".formatted(product.getName()));
         }
 
         if (cartItem != null) {
