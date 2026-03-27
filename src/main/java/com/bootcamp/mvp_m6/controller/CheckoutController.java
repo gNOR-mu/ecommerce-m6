@@ -3,6 +3,7 @@ package com.bootcamp.mvp_m6.controller;
 import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CheckoutService;
 import com.bootcamp.mvp_m6.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/checkout")
+@Slf4j
 public class CheckoutController {
 
     @Autowired
@@ -24,15 +27,22 @@ public class CheckoutController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public String checkout(){
+    public String checkout() {
         return "checkout";
     }
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public String checkout(@AuthenticationPrincipal UserDetails userDetails){
-        User user = userService.getByEmail(userDetails.getUsername());
-        checkoutService.checkout(user);
+    public String checkout(@AuthenticationPrincipal UserDetails userDetails,
+                           RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.getByEmail(userDetails.getUsername());
+            checkoutService.checkout(user);
+        } catch (Exception e) {
+            log.error("Ha ocurrido un error al procesar la compra: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al procesar la compra");
+        }
+
         return "redirect:/checkout";
     }
 
