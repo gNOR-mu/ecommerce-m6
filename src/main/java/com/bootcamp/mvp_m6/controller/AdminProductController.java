@@ -6,14 +6,17 @@ import com.bootcamp.mvp_m6.service.CategoryService;
 import com.bootcamp.mvp_m6.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/products")
+@Slf4j
 public class AdminProductController {
 
     @Autowired
@@ -33,8 +36,8 @@ public class AdminProductController {
 
     @GetMapping("/form")
     public String newProduct(
-            Model model,
-            @RequestParam(required = false) Long id) {
+            @RequestParam(required = false) Long id,
+            Model model) {
 
         ProductFormDTO product = id == null
                 ? new ProductFormDTO()
@@ -52,8 +55,14 @@ public class AdminProductController {
             @PathVariable @NotNull Long id,
             RedirectAttributes redirectAttributes) {
 
-        productService.deleteById(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Producto eliminado.");
+        try {
+            productService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto eliminado.");
+
+        } catch (Exception e) {
+            log.error("Error al intentar eliminar un producto: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al intentar eliminar el producto");
+        }
         return "redirect:/admin/products";
     }
 
@@ -61,15 +70,30 @@ public class AdminProductController {
      * Crea un nuevo producto
      *
      * @param dto DTO con información del producto a crear
-     * @return
+     * @return Redirección hacia /admin/products
      */
     @PostMapping
     public String saveProduct(
-            @Valid @ModelAttribute ProductFormDTO dto,
-            RedirectAttributes redirectAttributes) {
+            @Valid @ModelAttribute("product") ProductFormDTO dto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
-        productService.create(dto);
-        redirectAttributes.addFlashAttribute("successMessage", "Producto %s creado.".formatted(dto.getName()));
+        if (bindingResult.hasErrors()) {
+            //los vuelvo a agregar
+            model.addAttribute("brands", brandService.findAll());
+            model.addAttribute("categories", categoryService.findAll());
+            return "admin/productForm";
+        }
+
+        try{
+            productService.create(dto);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto %s creado.".formatted(dto.getName()));
+        }catch (Exception e){
+            log.error("Error al intentar crear un producto: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al intentar crear el producto");
+        }
+
         return "redirect:/admin/products";
     }
 
@@ -77,17 +101,25 @@ public class AdminProductController {
      * Actualiza un producto
      *
      * @param dto DTO con información del producto a crear
-     * @return
+     * @return Redirección hacia /admin/products
      */
     @PutMapping("/{id}")
     public String updateProduct(
-            @Valid @ModelAttribute ProductFormDTO dto,
+            @Valid @ModelAttribute("product") ProductFormDTO dto,
+            BindingResult bindingResult,
             @PathVariable @NotNull Long id,
             RedirectAttributes redirectAttributes
     ) {
-
-        productService.update(id, dto);
-        redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
+        if (bindingResult.hasErrors()) {
+            return "admin/productForm";
+        }
+        try{
+            productService.update(id, dto);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado correctamente.");
+        }catch (Exception e){
+            log.error("Error al intentar actualizar un producto: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error al intentar actualizar el producto");
+        }
         return "redirect:/admin/products";
     }
 
