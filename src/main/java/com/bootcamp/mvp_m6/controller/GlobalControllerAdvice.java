@@ -4,6 +4,7 @@ import com.bootcamp.mvp_m6.model.User;
 import com.bootcamp.mvp_m6.service.CartService;
 import com.bootcamp.mvp_m6.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * Global Controller Advice para manipular variables globales en los controladores
  */
 @ControllerAdvice(basePackages = "com.bootcamp.mvp_m6.controller")
+@Slf4j
 public class GlobalControllerAdvice {
 
     @Autowired
@@ -63,8 +65,7 @@ public class GlobalControllerAdvice {
             User user = userService.getByEmail(userDetails.getUsername());
             return cartService.getCarItemCount(user);
         } catch (Exception e) {
-            //TODO cambiar a log
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
