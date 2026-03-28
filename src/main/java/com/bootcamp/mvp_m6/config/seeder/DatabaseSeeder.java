@@ -66,6 +66,8 @@ public class DatabaseSeeder implements CommandLineRunner {
      * Inicializa los datos en la BD
      */
     private void seed() {
+        //parece una aberración, cambiar cuando haya tiempo
+
         /*Usuario administrado*/
         UserPrivateRegisterDTO admin = UserPrivateRegisterDTO.builder()
                 .email("admin@email.cl")
@@ -116,7 +118,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         Category accesorios = categoryService.findOrCreate("Accesorios");
         Category deporte = categoryService.findOrCreate("Deporte");
 
-        Product mochila = productRepository.findBySku("MO-1").orElse(productService.create(ProductFormDTO.builder()
+        Product mochila = productRepository.findBySku("MO-1").orElseGet(() -> productService.create(ProductFormDTO.builder()
                 .sku("MO-1")
                 .categoryId(expedicion.getId())
                 .brandId(head.getId())
@@ -141,7 +143,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         ));
 
 
-        Product bici = productRepository.findBySku("BI-0").orElse(productService.create(ProductFormDTO.builder()
+        Product bici = productRepository.findBySku("BI-0").orElseGet(() ->productService.create(ProductFormDTO.builder()
                 .categoryId(deporte.getId())
                 .sku("BI-0")
                 .brandId(totem.getId())
@@ -166,7 +168,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .build()
         ));
 
-        Product carpa = productRepository.findBySku("TI-0").orElse(productService.create(ProductFormDTO.builder()
+        Product carpa = productRepository.findBySku("TI-0").orElseGet(() ->productService.create(ProductFormDTO.builder()
                 .categoryId(expedicion.getId())
                 .sku("TI-0")
                 .brandId(maui.getId())
@@ -188,7 +190,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .build()
         ));
 
-        Product chaqueta = productRepository.findBySku("CH-0").orElse(productService.create(ProductFormDTO.builder()
+        Product chaqueta = productRepository.findBySku("CH-0").orElseGet(() ->productService.create(ProductFormDTO.builder()
                 .categoryId(ropa.getId())
                 .sku("CH-0")
                 .brandId(head.getId())
@@ -210,7 +212,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .build()
         ));
 
-        Product gafas = productRepository.findBySku("GA-0").orElse(productService.create(ProductFormDTO.builder()
+        Product gafas = productRepository.findBySku("GA-0").orElseGet(() ->productService.create(ProductFormDTO.builder()
                 .categoryId(accesorios.getId())
                 .sku("GA-0")
                 .brandId(rayBand.getId())
@@ -233,10 +235,9 @@ public class DatabaseSeeder implements CommandLineRunner {
         ));
 
 
-        //parece una aberración, cambiar cuando haya tiempo
         if (!orderRepository.hasData()) {
             Optional<User> firstClientUser = userRepository.findByEmail(firstClient.getEmail());
-            if(firstClientUser.isEmpty()){
+            if (firstClientUser.isEmpty()) {
                 return;
             }
             cartService.addProductToCart(firstClientUser.get(), new AddToCartDTO(gafas.getId(), 1));
