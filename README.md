@@ -113,11 +113,11 @@ Tomando en cuenta que se ejecuta en el equipo local y puerto 8080 con ruta base 
 
 Credenciales válidas para iniciar sesión (creadas al iniciar la aplicación):
 
-| ROL   | EMAIL              | CONTRASEÑA |
-|-------|--------------------|------------|
-| ADMIN | admin@email.cl     | admin1234  |
-| USER  | user@email.cl      | user1234   |
-| USER  | firstClient@mvp.cl | firstmvp   |
+| ROL    | EMAIL              | CONTRASEÑA |
+|--------|--------------------|------------|
+| ADMIN  | admin@email.cl     | admin1234  |
+| CLIENT | user@email.cl      | user1234   |
+| CLIENT | firstClient@mvp.cl | firstmvp   |
 
 # Algunas capturas
 
