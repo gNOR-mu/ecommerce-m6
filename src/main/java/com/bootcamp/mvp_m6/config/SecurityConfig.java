@@ -51,15 +51,6 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                 );
-
-        //permite frames para h2-console
-        http.headers(headers -> headers
-                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
-
-        //desactiva CSRF para h2-console
-        http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/h2-console/**"));
-
         return http.build();
     }
 
